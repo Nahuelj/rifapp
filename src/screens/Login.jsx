@@ -12,14 +12,20 @@ import { Link } from "expo-router";
 export function Login() {
   return (
     <View style={styles.cont}>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 10,
+        }}
+      >
         <Link href={"/"}>
           <Text>volver</Text>
         </Link>
+        <Text>-</Text>
         <Text>Iniciar sesión</Text>
       </View>
       <Image source={rifapp} />
-      <Text>Complete los siguientes campos para registrarse</Text>
+      <Text>Ingrese sus datos para iniciar sesión</Text>
       <TextInput
         placeholder="Correo electrónico"
         style={{ borderWidth: 1, width: 200 }}
@@ -28,14 +34,20 @@ export function Login() {
         placeholder="Contraseña"
         style={{ borderWidth: 1, width: 200 }}
       ></TextInput>
-      <Text>aun no tienes una cuenta ?</Text>
       <Pressable style={styles.btn}>
-        <Link href="/signup">
-          <Text>CREAR CUENTA</Text>
-        </Link>
+        <Text>INICIAR SESIÓN</Text>
       </Pressable>
-      <Text>Problemas para ingresar ? recuperar mi cuenta</Text>
-      <Text>terminos y condiciones</Text>
+      <Text>o ingresa con Google</Text>
+      <Pressable style={styles.btn}>
+        <Text>ingresar con Google</Text>
+      </Pressable>
+
+      <Text>
+        Aun no tienes cuenta?{"  "}
+        <Link href="/signup">
+          <Text>Registrarme</Text>
+        </Link>
+      </Text>
     </View>
   );
 }

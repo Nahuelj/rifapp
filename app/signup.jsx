@@ -1,5 +1,4 @@
-import { Text } from "react-native";
-
+import { Signup } from "../src/screens/Signup";
 export default function signup() {
-  return <Text>signup</Text>;
+  return <Signup />;
 }

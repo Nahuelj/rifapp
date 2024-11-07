@@ -19,7 +19,11 @@ export const InitScreen = () => {
           <Text>CREAR CUENTA</Text>
         </Link>
       </Pressable>
-      <Text>Problemas para ingresar ? recuperar mi cuenta</Text>
+
+      <Text>
+        Problemas para ingresar ?{"  "}
+        <Link href="/recover">Recuperar mi cuenta</Link>
+      </Text>
       <Text>terminos y condiciones</Text>
     </View>
   );
