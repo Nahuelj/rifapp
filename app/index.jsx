@@ -1,11 +1,5 @@
-import { View, Text } from "react-native";
-import { Link } from "expo-router";
+import { InitScreen } from "../src/screens/InitScreen";
 
 export default function index() {
-  return (
-    <View>
-      <Text>index</Text>
-      <Link href="/about">about</Link>
-    </View>
-  );
+  return <InitScreen />;
 }

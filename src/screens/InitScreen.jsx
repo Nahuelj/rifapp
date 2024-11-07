@@ -1,5 +1,6 @@
 import { Text, Image, Pressable, StyleSheet, View } from "react-native";
 import rifapp from "../../assets/app/rifapp_logo.png";
+import { Link } from "expo-router";
 
 export const InitScreen = () => {
   return (
@@ -8,11 +9,15 @@ export const InitScreen = () => {
       <Image source={rifapp} />
       <Text>Gestiona tus sorteos de forma comoda y segura</Text>
       <Pressable style={styles.btn}>
-        <Text>INICIAR SESIÓN</Text>
+        <Link href="/login">
+          <Text>INICIAR SESIÓN</Text>
+        </Link>
       </Pressable>
       <Text>aun no tienes una cuenta ?</Text>
       <Pressable style={styles.btn}>
-        <Text>CREAR CUENTA</Text>
+        <Link href="/signup">
+          <Text>CREAR CUENTA</Text>
+        </Link>
       </Pressable>
       <Text>Problemas para ingresar ? recuperar mi cuenta</Text>
       <Text>terminos y condiciones</Text>
