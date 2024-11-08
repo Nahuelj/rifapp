@@ -6,7 +6,7 @@ export function RaffleCard({
   img = default_img,
   title = "TitleRaffle",
   raffleLimits = "12/100",
-  status = "pass",
+  status = "past",
 }) {
   return (
     <View
