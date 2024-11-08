@@ -39,7 +39,9 @@ export function Signup() {
         style={{ borderWidth: 1, width: 200 }}
       ></TextInput>
       <Pressable style={styles.btn}>
-        <Text>REGISTRARME</Text>
+        <Link href="/home">
+          <Text>REGISTRARME</Text>
+        </Link>
       </Pressable>
       <Text>o registrate con Google</Text>
       <Pressable style={styles.btn}>

@@ -35,7 +35,9 @@ export function Login() {
         style={{ borderWidth: 1, width: 200 }}
       ></TextInput>
       <Pressable style={styles.btn}>
-        <Text>INICIAR SESIÓN</Text>
+        <Link href="/home">
+          <Text>INICIAR SESIÓN</Text>
+        </Link>
       </Pressable>
       <Text>o ingresa con Google</Text>
       <Pressable style={styles.btn}>

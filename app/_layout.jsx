@@ -1,10 +1,5 @@
 import { Slot } from "expo-router";
-import { View } from "react-native";
 
-export const InitLayout = () => {
-  return (
-    <View>
-      <Slot />
-    </View>
-  );
-};
+export default function Layout() {
+  return <Slot />;
+}
