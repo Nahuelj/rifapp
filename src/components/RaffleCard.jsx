@@ -1,6 +1,7 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import default_img from "../../assets/app/default_image_raffle_card.png";
+import { router } from "expo-router";
 
 export function RaffleCard({
   img = default_img,
@@ -8,8 +9,13 @@ export function RaffleCard({
   raffleLimits = "12/100",
   status = "past",
 }) {
+  const id = Math.ceil(Math.random() * 10);
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        router.push(`/raffleDetail/${id}`);
+      }}
       style={{
         flexDirection: "row",
         alignItems: "center",
@@ -39,6 +45,6 @@ export function RaffleCard({
           <Text>{status}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
