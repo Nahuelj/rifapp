@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Link, useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();
@@ -31,7 +32,7 @@ export default function raffleDetail() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Link href="/home">
           <Text>Volver</Text>
@@ -48,14 +49,13 @@ export default function raffleDetail() {
         numColumns={5}
         contentContainerStyle={styles.listContainer}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1, // Esto es importante para que ocupe toda la pantalla
-    padding: 8,
   },
   header: {
     flexDirection: "row",

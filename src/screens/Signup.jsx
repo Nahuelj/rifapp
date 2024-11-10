@@ -8,10 +8,11 @@ import {
 } from "react-native";
 import rifapp from "../../assets/app/rifapp_logo.png";
 import { Link } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export function Signup() {
   return (
-    <View style={styles.cont}>
+    <SafeAreaView style={styles.cont}>
       <View
         style={{
           flexDirection: "row",
@@ -54,14 +55,14 @@ export function Signup() {
           <Text>Iniciar sesión</Text>
         </Link>
       </Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   cont: {
     height: "100%",
-    paddingVertical: 40,
+    paddingVertical: 20,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
