@@ -1,6 +1,14 @@
-import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  FlatList,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function raffleDetail() {
@@ -18,9 +26,14 @@ export default function raffleDetail() {
   };
 
   const renderItem = ({ item }) => (
-    <Pressable style={styles.gridItem}>
+    <TouchableOpacity
+      onPress={() => {
+        console.log("abrir modal ");
+      }}
+      style={styles.gridItem}
+    >
       <Text>{item.number}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 
   return (
