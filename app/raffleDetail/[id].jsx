@@ -1,23 +1,15 @@
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
 import React from "react";
 import { Link, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();
-  const screenWidth = Dimensions.get("window").width;
-  const itemWidth = (screenWidth - 40) / 5; // 40 es el padding total (8 * 5)
 
+  // simulacion de data traida desde la db
   const data = {
     title: "Titulo de Sorteo",
-    numbers: Array.from({ length: 100 }, (_, index) => ({
+    numbers: Array.from({ length: 1000 }, (_, index) => ({
       number: index + 1,
       isAsigned: false,
       propietary: "Nahuel Benitez",
@@ -26,7 +18,7 @@ export default function raffleDetail() {
   };
 
   const renderItem = ({ item }) => (
-    <Pressable style={[styles.gridItem, { width: itemWidth }]}>
+    <Pressable style={styles.gridItem}>
       <Text>{item.number}</Text>
     </Pressable>
   );
@@ -47,7 +39,10 @@ export default function raffleDetail() {
         renderItem={renderItem}
         keyExtractor={(item) => item.number.toString()}
         numColumns={5}
+        columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContainer}
+        initialNumToRender={20}
+        windowSize={5} // Ajusta este valor según tu necesidad
       />
     </SafeAreaView>
   );
@@ -55,26 +50,29 @@ export default function raffleDetail() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Esto es importante para que ocupe toda la pantalla
+    flex: 1,
   },
   header: {
     flexDirection: "row",
     gap: 30,
     marginTop: 10,
     marginBottom: 20,
+    justifyContent: "center",
   },
   listContainer: {
-    width: "100%",
-    backgroundColor: "blue",
-    justifyContent: "space-evenly",
-    alignContent: "space-between",
+    paddingVertical: 10,
+  },
+  row: {
+    justifyContent: "center",
+    gap: 10,
+    marginBottom: 10,
   },
   gridItem: {
-    aspectRatio: 1, // Esto mantiene el elemento cuadrado
+    height: 65,
+    width: 65,
     borderWidth: 1,
     alignItems: "center",
-    alignContent: "center",
-    backgroundColor: "red",
-    width: "100%",
+    justifyContent: "center",
+    borderRadius: 7,
   },
 });
