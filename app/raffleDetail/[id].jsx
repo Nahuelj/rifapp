@@ -7,17 +7,20 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AsignedOwnerModal } from "../../src/components/AsignedOwnerModal";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();
 
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [ticketSelected, setTicketSelected] = useState({});
   // simulacion de data traida desde la db
   const data = {
     title: "Titulo de Sorteo",
-    numbers: Array.from({ length: 1000 }, (_, index) => ({
+    numbers: Array.from({ length: 500 }, (_, index) => ({
       number: index + 1,
       isAsigned: false,
       propietary: "Nahuel Benitez",
@@ -28,7 +31,8 @@ export default function raffleDetail() {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        console.log("abrir modal ");
+        setVisibleModal(true);
+        setTicketSelected(item);
       }}
       style={styles.gridItem}
     >
@@ -56,6 +60,12 @@ export default function raffleDetail() {
         contentContainerStyle={styles.listContainer}
         initialNumToRender={20}
         windowSize={5} // Ajusta este valor según tu necesidad
+      />
+      <AsignedOwnerModal
+        visibleState={visibleModal}
+        setVisibleState={setVisibleModal}
+        TicketNumber={ticketSelected?.number}
+        TicketStatus={ticketSelected?.isAsigned}
       />
     </SafeAreaView>
   );

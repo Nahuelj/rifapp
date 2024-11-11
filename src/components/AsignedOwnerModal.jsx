@@ -9,20 +9,23 @@ import {
 } from "react-native";
 
 export function AsignedOwnerModal({
-  TicketStatus = "Libre",
+  isAsigned = false,
   TicketNumber = 4,
+  visibleState = false,
+  setVisibleState,
 }) {
-  const [modalVisible, setModalVisible] = useState(true);
-
   return (
     <Modal
       animationType="fade"
-      visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)} // En Android, para cerrar con el botón de atrás
+      transparent={true}
+      visible={visibleState}
+      onRequestClose={() => setVisibleState(false)} // En Android, para cerrar con el botón de atrás
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>Ticket {TicketStatus}</Text>
+          <Text style={styles.modalText}>
+            Ticket {!isAsigned ? "Libre" : "Asignado"}
+          </Text>
           <Text style={styles.modalText}>Asignar Ticket N°{TicketNumber}</Text>
           <TextInput
             placeholder="Nombre"
@@ -48,6 +51,9 @@ export function AsignedOwnerModal({
           >
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
+              onPress={() => {
+                setVisibleState(false);
+              }}
             >
               <Text>Cerrar</Text>
             </TouchableOpacity>
