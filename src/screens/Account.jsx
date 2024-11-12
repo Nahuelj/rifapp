@@ -17,6 +17,7 @@ export function Account() {
           padding: 20,
           borderRadius: 10,
           gap: 10,
+          marginTop: 20,
         }}
       >
         <Image source={default_img} />

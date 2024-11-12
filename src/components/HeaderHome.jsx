@@ -11,7 +11,7 @@ export function HeaderHome() {
         gap: 30,
         padding: 10,
         marginTop: 10,
-        marginBottom: 20,
+        marginBottom: 15,
       }}
     >
       <Link asChild href="/home">

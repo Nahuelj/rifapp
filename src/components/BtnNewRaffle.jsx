@@ -13,11 +13,10 @@ export function BtnNewRaffle() {
           padding: 10,
           borderRadius: 5,
           alignSelf: "center",
-          position: "absolute",
-          bottom: 10,
           borderWidth: 1,
           borderColor: "black",
           zIndex: 5,
+          marginTop: 15,
         }}
       >
         <Text>+ NUEVO SORTEO</Text>

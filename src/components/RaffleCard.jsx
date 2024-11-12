@@ -6,10 +6,13 @@ import { router } from "expo-router";
 export function RaffleCard({
   img = default_img,
   title = "TitleRaffle",
-  raffleLimits = "12/100",
-  status = "past",
+  maxCapacity = 100,
+  currentCapacity = 12,
+  isActive = "activo",
 }) {
   const id = Math.ceil(Math.random() * 10);
+
+  const imageSource = typeof img === "string" ? { uri: img } : img;
 
   return (
     <TouchableOpacity
@@ -35,14 +38,18 @@ export function RaffleCard({
           borderWidth: 1,
           borderColor: "black",
           backgroundColor: "violet",
+          width: 100,
+          height: 80,
         }}
-        source={img}
+        source={imageSource}
       />
       <View style={{ justifyContent: "space-evenly" }}>
         <Text>{title}</Text>
         <View style={{ flexDirection: "row", gap: 20 }}>
-          <Text>{raffleLimits}</Text>
-          <Text>{status}</Text>
+          <Text>
+            {currentCapacity}/{maxCapacity}
+          </Text>
+          <Text>{isActive ? "activo" : "pasado"}</Text>
         </View>
       </View>
     </TouchableOpacity>
