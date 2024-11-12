@@ -20,12 +20,16 @@ export default function raffleDetail() {
   // simulacion de data traida desde la db
   const data = {
     title: "Titulo de Sorteo",
-    numbers: Array.from({ length: 500 }, (_, index) => ({
+    numbers: Array.from({ length: 100 }, (_, index) => ({
       number: index + 1,
       isAsigned: false,
       propietary: "Nahuel Benitez",
       note: "nota de numero",
     })),
+    maxCapacity: 100,
+    currentCapacity: 25,
+    isActive: true,
+    id: "jfa234-jasdklf-2l34j",
   };
 
   const renderItem = ({ item }) => (
@@ -51,16 +55,30 @@ export default function raffleDetail() {
         </Text>
       </View>
 
-      <FlatList
-        data={data.numbers}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.number.toString()}
-        numColumns={5}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.listContainer}
-        initialNumToRender={20}
-        windowSize={5} // Ajusta este valor según tu necesidad
-      />
+      <View style={{ height: 715 }}>
+        <FlatList
+          data={data.numbers}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.number.toString()}
+          numColumns={5}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.listContainer}
+          initialNumToRender={20}
+          windowSize={5} // Ajusta este valor según tu necesidad
+        />
+      </View>
+
+      <TouchableOpacity
+        style={{
+          margin: "auto",
+          borderWidth: 1,
+          borderColor: "red",
+          padding: 10,
+        }}
+      >
+        <Text>Sortear</Text>
+      </TouchableOpacity>
+
       <AsignedOwnerModal
         visibleState={visibleModal}
         setVisibleState={setVisibleModal}
@@ -84,6 +102,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingVertical: 10,
+    backgroundColor: "red",
   },
   row: {
     justifyContent: "center",
