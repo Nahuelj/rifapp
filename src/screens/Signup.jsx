@@ -9,8 +9,25 @@ import {
 import rifapp from "../../assets/app/rifapp_logo.png";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
+import {
+  signIn,
+  signOutUser,
+  signUp,
+} from "../../firebase/utils/auth_functions";
 
 export function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  console.log("🚀 ~ Signup ~ name:", name);
+  console.log("🚀 ~ Signup ~ email:", email);
+  console.log("🚀 ~ Signup ~ password:", password);
+
+  const handleRegister = (email, password) => {
+    signUp(email, password);
+  };
+
   return (
     <SafeAreaView style={styles.cont}>
       <View
@@ -30,19 +47,30 @@ export function Signup() {
       <TextInput
         placeholder="Nombre"
         style={{ borderWidth: 1, width: 200 }}
+        onChangeText={(text) => setName(text)}
+        value={name}
       ></TextInput>
       <TextInput
+        textContentType="emailAddress"
         placeholder="Correo electrónico"
         style={{ borderWidth: 1, width: 200 }}
+        onChangeText={(text) => setEmail(text)}
+        value={email}
       ></TextInput>
       <TextInput
         placeholder="Contraseña"
         style={{ borderWidth: 1, width: 200 }}
+        secureTextEntry={true}
+        onChangeText={(text) => setPassword(text)}
+        value={password}
       ></TextInput>
-      <Pressable style={styles.btn}>
-        <Link href="/home">
-          <Text>REGISTRARME</Text>
-        </Link>
+      <Pressable
+        style={styles.btn}
+        onPress={() => {
+          handleRegister(email, password);
+        }}
+      >
+        <Text>REGISTRARME</Text>
       </Pressable>
       <Text>o registrate con Google</Text>
       <Pressable style={styles.btn}>
