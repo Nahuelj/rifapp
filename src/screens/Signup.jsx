@@ -10,11 +10,6 @@ import rifapp from "../../assets/app/rifapp_logo.png";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import {
-  signIn,
-  signOutUser,
-  signUp,
-} from "../../firebase/utils/auth_functions";
 
 export function Signup() {
   const [name, setName] = useState("");
@@ -24,9 +19,7 @@ export function Signup() {
   console.log("🚀 ~ Signup ~ email:", email);
   console.log("🚀 ~ Signup ~ password:", password);
 
-  const handleRegister = (email, password) => {
-    signUp(email, password);
-  };
+  const handleRegister = (email, password) => {};
 
   return (
     <SafeAreaView style={styles.cont}>
