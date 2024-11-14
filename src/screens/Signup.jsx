@@ -10,14 +10,12 @@ import rifapp from "../../assets/app/rifapp_logo.png";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
+import { registerWithEmailPassword } from "../../firebase/utils/auth";
 
 export function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log("🚀 ~ Signup ~ name:", name);
-  console.log("🚀 ~ Signup ~ email:", email);
-  console.log("🚀 ~ Signup ~ password:", password);
 
   const handleRegister = (email, password) => {};
 
@@ -60,13 +58,18 @@ export function Signup() {
       <Pressable
         style={styles.btn}
         onPress={() => {
-          handleRegister(email, password);
+          registerWithEmailPassword(email, password, name);
         }}
       >
         <Text>REGISTRARME</Text>
       </Pressable>
       <Text>o registrate con Google</Text>
-      <Pressable style={styles.btn}>
+      <Pressable
+        style={styles.btn}
+        onPress={() => {
+          console.log("");
+        }}
+      >
         <Text>continuar con Google</Text>
       </Pressable>
 
