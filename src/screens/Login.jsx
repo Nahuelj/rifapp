@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import rifapp from "../../assets/app/rifapp_logo.png";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
@@ -49,6 +49,7 @@ export function Login() {
         style={styles.btn}
         onPress={() => {
           signInWithEmailPassword(email, password);
+          router.replace("/home");
         }}
       >
         <Text>INICIAR SESIÓN</Text>

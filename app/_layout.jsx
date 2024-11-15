@@ -1,18 +1,9 @@
-import { Stack } from "expo-router";
+import { Stack, Slot } from "expo-router";
 import { Platform } from "react-native";
 import { useAuth } from "../src/hooks/useAuth";
-import { ActivityIndicator, View } from "react-native";
 
 export default function Layout() {
-  const { isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  useAuth();
 
   return (
     <Stack
