@@ -10,7 +10,9 @@ import {
 import React, { useState } from "react";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AsignedOwnerModal } from "../../src/components/AsignedOwnerModal";
+import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
+import { useAuth } from "../../../src/hooks/useAuth";
+import { Redirect } from "expo-router";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();

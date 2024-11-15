@@ -10,14 +10,13 @@ import rifapp from "../../assets/app/rifapp_logo.png";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import { registerWithEmailPassword } from "../../firebase/utils/auth";
+import { useAuth } from "../hooks/useAuth";
 
 export function Signup() {
+  const { registerWithEmailPassword } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleRegister = (email, password) => {};
 
   return (
     <SafeAreaView style={styles.cont}>

@@ -3,8 +3,11 @@ import React from "react";
 import { HeaderHome } from "../components/HeaderHome";
 import { SafeAreaView } from "react-native-safe-area-context";
 import default_img from "../../assets/app/default_image_raffle_card.png";
+import { useAuth } from "../hooks/useAuth";
 
 export function Account() {
+  const { logout } = useAuth();
+
   return (
     <SafeAreaView>
       <HeaderHome />
@@ -25,7 +28,7 @@ export function Account() {
         <Text>correoelectronico@algo.com</Text>
       </View>
 
-      <View style={{ marginTop: 100, gap: 50 }}>
+      <View style={{ marginTop: 70, gap: 40 }}>
         <TouchableOpacity
           style={{
             marginHorizontal: "auto",
@@ -65,6 +68,19 @@ export function Account() {
           }}
         >
           <Text>Terminos y condiciones</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            marginHorizontal: "auto",
+            borderBlockColor: "red",
+            borderWidth: 1,
+            padding: 10,
+          }}
+          onPress={() => {
+            logout();
+          }}
+        >
+          <Text>Cerrar session</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{

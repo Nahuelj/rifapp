@@ -9,8 +9,14 @@ import {
 import rifapp from "../../assets/app/rifapp_logo.png";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 export function Login() {
+  const { signInWithEmailPassword } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <SafeAreaView style={styles.cont}>
       <View
@@ -30,15 +36,22 @@ export function Login() {
       <TextInput
         placeholder="Correo electrónico"
         style={{ borderWidth: 1, width: 200 }}
+        onChangeText={(text) => setEmail(text)}
+        value={email}
       ></TextInput>
       <TextInput
         placeholder="Contraseña"
         style={{ borderWidth: 1, width: 200 }}
+        onChangeText={(text) => setPassword(text)}
+        value={password}
       ></TextInput>
-      <Pressable style={styles.btn}>
-        <Link href="/home">
-          <Text>INICIAR SESIÓN</Text>
-        </Link>
+      <Pressable
+        style={styles.btn}
+        onPress={() => {
+          signInWithEmailPassword(email, password);
+        }}
+      >
+        <Text>INICIAR SESIÓN</Text>
       </Pressable>
       <Text>o ingresa con Google</Text>
       <Pressable style={styles.btn}>
