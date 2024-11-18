@@ -16,10 +16,8 @@ export function AsignedOwnerModal({
   raffleId,
   onPressFunction,
 }) {
-  const [propietary, setPropietary] = useState("asdf");
-  console.log("🚀 ~ propietary:", propietary);
-  const [note, setNote] = useState("kaljsdf");
-  console.log("🚀 ~ note:", note);
+  const [propietary, setPropietary] = useState("");
+  const [note, setNote] = useState("");
 
   return (
     <Modal
