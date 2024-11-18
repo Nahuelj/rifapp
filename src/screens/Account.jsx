@@ -4,6 +4,7 @@ import { HeaderHome } from "../components/HeaderHome";
 import { SafeAreaView } from "react-native-safe-area-context";
 import default_img from "../../assets/app/default_image_raffle_card.png";
 import { useAuth } from "../hooks/useAuth";
+import { router } from "expo-router";
 
 export function Account() {
   const { logout } = useAuth();
@@ -76,8 +77,8 @@ export function Account() {
             borderWidth: 1,
             padding: 10,
           }}
-          onPress={() => {
-            logout();
+          onPress={async () => {
+            await logout();
           }}
         >
           <Text>Cerrar session</Text>

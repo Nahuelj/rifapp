@@ -9,9 +9,8 @@ export function RaffleCard({
   maxCapacity = 100,
   currentCapacity = 12,
   isActive = "activo",
+  id,
 }) {
-  const id = Math.ceil(Math.random() * 10);
-
   const imageSource = typeof img === "string" ? { uri: img } : img;
 
   return (

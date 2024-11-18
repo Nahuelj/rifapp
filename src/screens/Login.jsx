@@ -49,7 +49,6 @@ export function Login() {
         style={styles.btn}
         onPress={() => {
           signInWithEmailPassword(email, password);
-          router.replace("/home");
         }}
       >
         <Text>INICIAR SESIÓN</Text>

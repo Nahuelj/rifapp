@@ -1,37 +1,35 @@
 import {
   View,
   Text,
-  Pressable,
   StyleSheet,
   FlatList,
-  TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
-import { Link, router, useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState, useCallback } from "react";
+import { Link, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
+import { getRaffleDetail } from "../../../src/utils/raffle_functions";
+import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();
-  const router = useRouter();
-
   const [visibleModal, setVisibleModal] = useState(false);
   const [ticketSelected, setTicketSelected] = useState({});
-  // simulacion de data traida desde la db
-  const data = {
-    title: "Titulo de Sorteo",
-    numbers: Array.from({ length: 100 }, (_, index) => ({
-      number: index + 1,
-      isAsigned: false,
-      propietary: "Nahuel Benitez",
-      note: "nota de numero",
-    })),
-    maxCapacity: 100,
-    currentCapacity: 25,
-    isActive: true,
-    id: "jfa234-jasdklf-2l34j",
-  };
+  const [data, setData] = useState({});
+  const [propietary, setPropietary] = useState("Nahuel jose jose");
+  const [note, setNote] = useState("hola note enviada desde celu");
+  console.log("🚀 ~ raffleDetail ~ data:", data);
+
+  useEffect(() => {
+    async function fetch() {
+      console.log("obteniendo data...");
+      const response = await getRaffleDetail(id);
+      setData(response);
+      console.log("🚀 ~ fetch ~ response:", response);
+    }
+    fetch();
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -85,6 +83,11 @@ export default function raffleDetail() {
         setVisibleState={setVisibleModal}
         TicketNumber={ticketSelected?.number}
         TicketStatus={ticketSelected?.isAsigned}
+        onPressFunction={() => {
+          console.log("actualizando ticket....");
+          updateRaffleNumber(id, ticketSelected?.number, propietary, note);
+          console.log("ticket actualizado");
+        }}
       />
     </SafeAreaView>
   );

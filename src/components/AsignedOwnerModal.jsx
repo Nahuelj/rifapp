@@ -13,6 +13,7 @@ export function AsignedOwnerModal({
   TicketNumber = 4,
   visibleState = false,
   setVisibleState,
+  onPressFunction,
 }) {
   return (
     <Modal
@@ -59,6 +60,9 @@ export function AsignedOwnerModal({
             </TouchableOpacity>
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
+              onPress={() => {
+                onPressFunction();
+              }}
             >
               <Text>Asignar</Text>
             </TouchableOpacity>

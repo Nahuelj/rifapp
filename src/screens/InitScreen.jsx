@@ -1,9 +1,42 @@
-import { Text, Image, Pressable, StyleSheet, View } from "react-native";
+import {
+  Text,
+  Image,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import rifapp from "../../assets/app/rifapp_logo.png";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect, useState } from "react";
+import { getSessionLocalId } from "../utils/storage_functions";
 
 export const InitScreen = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function getSession() {
+      console.log("obteniendo session..");
+      const localId = await getSessionLocalId();
+      if (localId) {
+        // Si existe la sesión, redirigir a Home
+        return router.replace("/home");
+      }
+      console.log("🚀 ~ getSession ~ localId:", localId);
+      setIsLoading(false); // Detener el loader si no hay sesión
+    }
+    getSession();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.loaderContainer}>
+        {/* Muestra el loader mientras se obtiene la sesión */}
+        <ActivityIndicator size="large" color="#0000ff" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.cont}>
       <Text>🎉 Te damos la Bienvenida 🥳</Text>
@@ -36,6 +69,11 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
   btn: {

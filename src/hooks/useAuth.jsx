@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 const firebase_key = "AIzaSyC47rYcE77IeU9vIMva__-jA7cXRs5C0Uk";
 
@@ -121,19 +122,19 @@ export const useAuth = () => {
         }
       );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error.message);
+      if (!response?.ok) {
+        const errorData = await response?.json();
+        throw new Error(errorData?.error?.message);
       }
 
-      const data = await response.json();
+      const data = await response?.json();
       // Usar la nueva función para guardar y navegar
       await saveSession(data);
+      router.replace("/home");
       return data;
     } catch (error) {
       console.error("Error signing in:", error);
-      setError(error.message);
-      throw error;
+      setError(error?.message);
     } finally {
       setIsLoading(false);
     }
@@ -145,6 +146,7 @@ export const useAuth = () => {
     try {
       await AsyncStorage.removeItem("userSession");
       setIsAuthenticated(false);
+      router.replace("/");
     } catch (error) {
       console.error("Error during logout:", error);
       setError(error.message);

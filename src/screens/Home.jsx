@@ -16,6 +16,7 @@ export function Home() {
   useEffect(() => {
     const fetchSession = async () => {
       const sessionData = await getSessionLocalId();
+      console.log("🚀 ~ fetchSession ~ sessionData:", sessionData);
       setSession(sessionData);
     };
 
@@ -51,6 +52,7 @@ export function Home() {
       currentCapacity={item?.currentCapacity}
       title={item?.title}
       isActive={item?.isActive}
+      id={item.id}
     />
   );
 

@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { addNewRaffle } from "../utils/raffle_functions";
 import { getSessionLocalId } from "../utils/storage_functions"; // Asegúrate de que esta importación esté presente
 
@@ -36,6 +36,7 @@ export function NewRaffle() {
       quantityWinners
     );
     console.log("Sorteo creado.");
+    router.push("/home");
   };
 
   return (
