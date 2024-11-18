@@ -9,11 +9,14 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Link, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
+import { RunRaffleModal } from "../../../src/components/RunRaffleModal";
 import {
   getRaffleDetail,
   removeTicket,
+  runRaffle,
 } from "../../../src/utils/raffle_functions";
 import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
+import { getAssignedNumbers } from "../../../src/utils/raffle_functions";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();
@@ -35,6 +38,11 @@ export default function raffleDetail() {
     setVisibleModal(false);
   };
 
+  const handleRunRaffle = async () => {
+    const result = await getAssignedNumbers(id);
+    console.log("🚀 ~ handleRunRaffle ~ result:", result);
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
@@ -53,9 +61,7 @@ export default function raffleDetail() {
         <Link href="/home">
           <Text>Volver</Text>
         </Link>
-        <Text>
-          {data.title} {id}
-        </Text>
+        <Text>{data.title}</Text>
       </View>
 
       <View style={{ height: 715 }}>
@@ -78,6 +84,7 @@ export default function raffleDetail() {
           borderColor: "red",
           padding: 10,
         }}
+        onPress={handleRunRaffle}
       >
         <Text>Sortear</Text>
       </TouchableOpacity>
@@ -95,6 +102,8 @@ export default function raffleDetail() {
         ticketPropietary={ticketSelected?.propietary}
         ticketNote={ticketSelected?.note}
       />
+
+      <RunRaffleModal />
     </SafeAreaView>
   );
 }

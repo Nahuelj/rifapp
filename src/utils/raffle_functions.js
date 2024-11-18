@@ -32,7 +32,7 @@ export async function addNewRaffle(
       currentCapacity: 0,
       isActive: true,
       id: uuid.v4(),
-      // image,
+      quantityWinners,
     };
 
     // 3. Preparamos el array actualizado
@@ -256,4 +256,68 @@ export async function removeTicket(raffleId, numberToUpdate) {
     console.error("Error al actualizar el número del sorteo:", error);
     throw error;
   }
+}
+
+export async function getAssignedNumbers(raffleId) {
+  const userSession = await getSessionLocalId();
+  const userId = userSession?.localId;
+
+  try {
+    const response = await fetch(
+      `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles.json?orderBy="id"&equalTo="${raffleId}"`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response?.status}`);
+    }
+
+    const data = await response.json();
+    console.log("🚀 ~ getAssignedNumbers ~ data:", data);
+
+    // Extraer la clave del objeto principal (por ejemplo, "8")
+    const raffleKey = Object.keys(data)[0];
+
+    if (!raffleKey || !data[raffleKey]?.numbers) {
+      throw new Error("No se encontraron números en el sorteo.");
+    }
+
+    // Obtener la cantidada de ganadores a generar
+    const quantityWinners = data[raffleKey].quantityWinners;
+
+    // Filtrar los números asignados y mapear solo su valor
+    const soldNumbers = data[raffleKey].numbers
+      .filter((numberObj) => numberObj.isAsigned)
+      .map((numberObj) => numberObj.number);
+
+    const result = runRaffle(soldNumbers, quantityWinners);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener numeros asignados:", error);
+    throw error;
+  }
+}
+
+export function runRaffle(soldNumbers, winnersCount) {
+  // Validaciones iniciales
+  if (!Array.isArray(soldNumbers) || soldNumbers.length === 0) {
+    throw new Error("El array de números vendidos no puede estar vacío.");
+  }
+
+  if (winnersCount <= 0 || winnersCount > soldNumbers.length) {
+    throw new Error(
+      "La cantidad de ganadores debe ser mayor que 0 y menor o igual al total de números vendidos."
+    );
+  }
+
+  // Seleccionar ganadores al azar
+  const winners = [];
+  const soldNumbersCopy = [...soldNumbers]; // Copia para evitar modificar el array original
+
+  while (winners.length < winnersCount) {
+    const randomIndex = Math.floor(Math.random() * soldNumbersCopy.length);
+    const winner = soldNumbersCopy.splice(randomIndex, 1)[0]; // Extrae el ganador y lo elimina del array
+    winners.push(winner);
+  }
+
+  return winners;
 }

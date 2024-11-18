@@ -20,8 +20,6 @@ export function AsignedOwnerModal({
   ticketPropietary,
   ticketNote,
 }) {
-  console.log("🚀 ~ ticketNote:", ticketNote);
-  console.log("🚀 ~ ticketPropietary:", ticketPropietary);
   const [propietary, setPropietary] = useState("");
   const [note, setNote] = useState("");
 
