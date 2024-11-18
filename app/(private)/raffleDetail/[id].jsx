@@ -13,7 +13,6 @@ import { RunRaffleModal } from "../../../src/components/RunRaffleModal";
 import {
   getRaffleDetail,
   removeTicket,
-  runRaffle,
 } from "../../../src/utils/raffle_functions";
 import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
 import { getAssignedNumbers } from "../../../src/utils/raffle_functions";
@@ -25,6 +24,7 @@ export default function raffleDetail() {
   const [data, setData] = useState({});
   const [updateTrigger, setUpdateTrigger] = useState(0); // Nuevo estado
   const [visibleRunRaffle, setVisibleRunRaffle] = useState(false);
+  const [raffleResult, setRaffleResult] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,10 +39,16 @@ export default function raffleDetail() {
     setVisibleModal(false);
   };
 
+  const handleRaffleComplete = async () => {
+    setUpdateTrigger((prev) => prev + 1); // Incrementa el contador
+    setVisibleRunRaffle(false);
+  };
+
   const handleRunRaffle = async () => {
     setVisibleRunRaffle(true);
     const result = await getAssignedNumbers(id);
     console.log("🚀 ~ handleRunRaffle ~ result:", result);
+    setRaffleResult(result);
   };
 
   const renderItem = ({ item }) => (
@@ -79,17 +85,33 @@ export default function raffleDetail() {
         />
       </View>
 
-      <TouchableOpacity
-        style={{
-          margin: "auto",
-          borderWidth: 1,
-          borderColor: "red",
-          padding: 10,
-        }}
-        onPress={handleRunRaffle}
-      >
-        <Text>Sortear</Text>
-      </TouchableOpacity>
+      {data.isActive ? (
+        <TouchableOpacity
+          style={{
+            margin: "auto",
+            borderWidth: 1,
+            borderColor: "red",
+            padding: 10,
+          }}
+          onPress={handleRunRaffle}
+        >
+          <Text>Sortear</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={{
+            margin: "auto",
+            borderWidth: 1,
+            borderColor: "red",
+            padding: 10,
+          }}
+          onPress={() => {
+            console.log("ver resultados");
+          }}
+        >
+          <Text>Ver resultados</Text>
+        </TouchableOpacity>
+      )}
 
       <AsignedOwnerModal
         visibleState={visibleModal}
@@ -100,7 +122,7 @@ export default function raffleDetail() {
         isAsigned={ticketSelected?.isAsigned}
         onPressFunction={updateRaffleNumber}
         onRemoveFuntion={removeTicket}
-        onUpdateComplete={handleUpdateComplete} // Nueva prop
+        onUpdateComplete={handleUpdateComplete} // Para volver a renderizar el componente
         ticketPropietary={ticketSelected?.propietary}
         ticketNote={ticketSelected?.note}
       />
@@ -108,6 +130,9 @@ export default function raffleDetail() {
       <RunRaffleModal
         visibleState={visibleRunRaffle}
         setVisibleState={setVisibleRunRaffle}
+        raffleId={id}
+        raffleResult={raffleResult}
+        onUpdateComplete={handleRaffleComplete} // Para volver a renderizar el componente
       />
     </SafeAreaView>
   );

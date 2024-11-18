@@ -4,14 +4,28 @@ import {
   Text,
   Modal,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
+  LogBox,
 } from "react-native";
-
 import { CheckBox } from "@rneui/themed";
+import { updateRaffleRealized } from "../utils/raffle_functions";
 
-export function RunRaffleModal({ visibleState, setVisibleState }) {
+export function RunRaffleModal({
+  visibleState,
+  setVisibleState,
+  raffleResult,
+  raffleId,
+  onUpdateComplete,
+}) {
   const [check, setCheck] = useState(false);
+
+  const handleRaffleRealized = async () => {
+    console.log("updating results...");
+    const response = await updateRaffleRealized(raffleId, raffleResult);
+    onUpdateComplete();
+    console.log("🚀 ~ handleRaffleRealized ~ response:", response);
+    console.log("resultados actualizados exitosamente");
+  };
 
   return (
     <Modal
@@ -71,10 +85,8 @@ export function RunRaffleModal({ visibleState, setVisibleState }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
-              onPress={() => {
-                console.log("pressed");
-              }}
               disabled={!check}
+              onPress={handleRaffleRealized}
             >
               <Text>Sortear</Text>
             </TouchableOpacity>
