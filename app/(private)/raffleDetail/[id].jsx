@@ -17,16 +17,11 @@ export default function raffleDetail() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [ticketSelected, setTicketSelected] = useState({});
   const [data, setData] = useState({});
-  const [propietary, setPropietary] = useState("Nahuel jose jose");
-  const [note, setNote] = useState("hola note enviada desde celu");
-  console.log("🚀 ~ raffleDetail ~ data:", data);
 
   useEffect(() => {
     async function fetch() {
-      console.log("obteniendo data...");
       const response = await getRaffleDetail(id);
       setData(response);
-      console.log("🚀 ~ fetch ~ response:", response);
     }
     fetch();
   }, []);
@@ -83,11 +78,8 @@ export default function raffleDetail() {
         setVisibleState={setVisibleModal}
         TicketNumber={ticketSelected?.number}
         TicketStatus={ticketSelected?.isAsigned}
-        onPressFunction={() => {
-          console.log("actualizando ticket....");
-          updateRaffleNumber(id, ticketSelected?.number, propietary, note);
-          console.log("ticket actualizado");
-        }}
+        raffleId={id}
+        onPressFunction={updateRaffleNumber}
       />
     </SafeAreaView>
   );

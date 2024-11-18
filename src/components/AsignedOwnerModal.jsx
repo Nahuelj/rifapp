@@ -13,8 +13,14 @@ export function AsignedOwnerModal({
   TicketNumber = 4,
   visibleState = false,
   setVisibleState,
+  raffleId,
   onPressFunction,
 }) {
+  const [propietary, setPropietary] = useState("asdf");
+  console.log("🚀 ~ propietary:", propietary);
+  const [note, setNote] = useState("kaljsdf");
+  console.log("🚀 ~ note:", note);
+
   return (
     <Modal
       animationType="fade"
@@ -31,9 +37,15 @@ export function AsignedOwnerModal({
           <TextInput
             placeholder="Nombre"
             style={{ borderWidth: 1, padding: 10 }}
+            onChangeText={(text) => {
+              setPropietary(text);
+            }}
           />
           <TextInput
             placeholder="Nota"
+            onChangeText={(text) => {
+              setNote(text);
+            }}
             style={{
               borderWidth: 1,
               padding: 10,
@@ -61,7 +73,7 @@ export function AsignedOwnerModal({
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
               onPress={() => {
-                onPressFunction();
+                onPressFunction(raffleId, TicketNumber, propietary, note);
               }}
             >
               <Text>Asignar</Text>
