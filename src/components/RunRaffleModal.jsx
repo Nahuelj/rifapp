@@ -8,23 +8,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export function RunRaffleModal({
-  isAsigned = false,
-  TicketNumber = 4,
-  visibleState = false,
-  setVisibleState,
-  raffleId,
-  onPressFunction,
-  onRemoveFuntion,
-  onUpdateComplete,
-  ticketPropietary,
-  ticketNote,
-}) {
+import { CheckBox } from "@rneui/themed";
+
+export function RunRaffleModal({ visibleState, setVisibleState }) {
+  const [check, setCheck] = useState(false);
+
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      visible={true}
+      visible={visibleState}
       onRequestClose={() => setVisibleState(false)} // En Android, para cerrar con el botón de atrás
     >
       <View style={styles.modalBackground}>
@@ -40,7 +33,22 @@ export function RunRaffleModal({
             modificarse una vez realizados los cambios
           </Text>
 
-          <View style={styles.checkboxContainer}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CheckBox
+              center
+              checked={check}
+              onPress={() => setCheck((prev) => !prev)}
+              iconType="material-community"
+              checkedIcon="checkbox-marked"
+              uncheckedIcon="checkbox-blank-outline"
+              checkedColor="purple"
+            />
             <Text style={styles.label}>
               Confirmo que quiero realizar el sorteo
             </Text>
@@ -63,6 +71,10 @@ export function RunRaffleModal({
             </TouchableOpacity>
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
+              onPress={() => {
+                console.log("pressed");
+              }}
+              disabled={!check}
             >
               <Text>Sortear</Text>
             </TouchableOpacity>

@@ -24,6 +24,7 @@ export default function raffleDetail() {
   const [ticketSelected, setTicketSelected] = useState({});
   const [data, setData] = useState({});
   const [updateTrigger, setUpdateTrigger] = useState(0); // Nuevo estado
+  const [visibleRunRaffle, setVisibleRunRaffle] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,6 +40,7 @@ export default function raffleDetail() {
   };
 
   const handleRunRaffle = async () => {
+    setVisibleRunRaffle(true);
     const result = await getAssignedNumbers(id);
     console.log("🚀 ~ handleRunRaffle ~ result:", result);
   };
@@ -103,7 +105,10 @@ export default function raffleDetail() {
         ticketNote={ticketSelected?.note}
       />
 
-      <RunRaffleModal />
+      <RunRaffleModal
+        visibleState={visibleRunRaffle}
+        setVisibleState={setVisibleRunRaffle}
+      />
     </SafeAreaView>
   );
 }
