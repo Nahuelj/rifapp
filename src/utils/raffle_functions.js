@@ -188,3 +188,72 @@ export async function updateRaffleNumber(
     throw error;
   }
 }
+
+export async function removeTicket(raffleId, numberToUpdate) {
+  const userSession = await getSessionLocalId();
+  const userId = userSession?.localId;
+
+  try {
+    // Fetch the current raffle data
+    const getRaffleResponse = await fetch(
+      `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles.json`
+    );
+
+    if (!getRaffleResponse.ok) {
+      throw new Error(`Error HTTP: ${getRaffleResponse?.status}`);
+    }
+
+    const raffles = await getRaffleResponse.json();
+
+    // Find the specific raffle
+    const raffleIndex = Object.keys(raffles).find(
+      (key) => raffles[key].id === raffleId
+    );
+
+    if (!raffleIndex) {
+      throw new Error("Raffle not found");
+    }
+
+    const raffleData = raffles[raffleIndex];
+
+    // Find and update the specific number
+    const updatedNumbers = raffleData.numbers.map((num) =>
+      num.number === numberToUpdate
+        ? {
+            number: numberToUpdate,
+            isAsigned: false,
+            propietary: "",
+            note: "",
+          }
+        : num
+    );
+
+    // Prepare the updated raffle data
+    const updatedRaffleData = {
+      ...raffleData,
+      numbers: updatedNumbers,
+      currentCapacity: raffleData.currentCapacity + 1,
+    };
+
+    // Update the raffle in the database
+    const updateResponse = await fetch(
+      `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles/${raffleIndex}.json`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRaffleData),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      throw new Error(`Error HTTP: ${updateResponse?.status}`);
+    }
+
+    return await updateResponse.json();
+  } catch (error) {
+    console.error("Error al actualizar el número del sorteo:", error);
+    throw error;
+  }
+}

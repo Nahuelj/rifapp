@@ -9,7 +9,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Link, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
-import { getRaffleDetail } from "../../../src/utils/raffle_functions";
+import {
+  getRaffleDetail,
+  removeTicket,
+} from "../../../src/utils/raffle_functions";
 import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
 
 export default function raffleDetail() {
@@ -17,14 +20,20 @@ export default function raffleDetail() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [ticketSelected, setTicketSelected] = useState({});
   const [data, setData] = useState({});
+  const [updateTrigger, setUpdateTrigger] = useState(0); // Nuevo estado
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       const response = await getRaffleDetail(id);
       setData(response);
     }
-    fetch();
-  }, []);
+    fetchData();
+  }, [updateTrigger]); // Dependencia cambiada a updateTrigger
+
+  const handleUpdateComplete = async () => {
+    setUpdateTrigger((prev) => prev + 1); // Incrementa el contador
+    setVisibleModal(false);
+  };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -32,9 +41,9 @@ export default function raffleDetail() {
         setVisibleModal(true);
         setTicketSelected(item);
       }}
-      style={styles.gridItem}
+      style={[styles.gridItem, item?.isAsigned && styles.asigned]}
     >
-      <Text>{item.number}</Text>
+      <Text style={[item.isAsigned && styles.asignedText]}>{item.number}</Text>
     </TouchableOpacity>
   );
 
@@ -79,7 +88,12 @@ export default function raffleDetail() {
         TicketNumber={ticketSelected?.number}
         TicketStatus={ticketSelected?.isAsigned}
         raffleId={id}
+        isAsigned={ticketSelected?.isAsigned}
         onPressFunction={updateRaffleNumber}
+        onRemoveFuntion={removeTicket}
+        onUpdateComplete={handleUpdateComplete} // Nueva prop
+        ticketPropietary={ticketSelected?.propietary}
+        ticketNote={ticketSelected?.note}
       />
     </SafeAreaView>
   );
@@ -98,7 +112,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingVertical: 10,
-    backgroundColor: "red",
   },
   row: {
     justifyContent: "center",
@@ -112,5 +125,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 7,
+  },
+  asigned: {
+    backgroundColor: "purple",
+    color: "white",
+  },
+  asignedText: {
+    color: "white",
   },
 });

@@ -15,9 +15,35 @@ export function AsignedOwnerModal({
   setVisibleState,
   raffleId,
   onPressFunction,
+  onRemoveFuntion,
+  onUpdateComplete,
+  ticketPropietary,
+  ticketNote,
 }) {
+  console.log("🚀 ~ ticketNote:", ticketNote);
+  console.log("🚀 ~ ticketPropietary:", ticketPropietary);
   const [propietary, setPropietary] = useState("");
   const [note, setNote] = useState("");
+
+  const handleAssign = async () => {
+    try {
+      await onPressFunction(raffleId, TicketNumber, propietary, note);
+      onUpdateComplete(); // Llama a la función después de actualizar
+    } catch (error) {
+      console.error("Error al asignar:", error);
+      // Manejar el error según sea necesario
+    }
+  };
+
+  const handleRemove = async () => {
+    try {
+      await onRemoveFuntion(raffleId, TicketNumber);
+      onUpdateComplete(); // Llama a la función después de actualizar
+    } catch (error) {
+      console.error("Error al asignar:", error);
+      // Manejar el error según sea necesario
+    }
+  };
 
   return (
     <Modal
@@ -32,15 +58,24 @@ export function AsignedOwnerModal({
             Ticket {!isAsigned ? "Libre" : "Asignado"}
           </Text>
           <Text style={styles.modalText}>Asignar Ticket N°{TicketNumber}</Text>
+          {isAsigned && (
+            <TouchableOpacity
+              style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
+              onPress={handleRemove}
+            >
+              <Text style={{ textAlign: "center" }}>Eliminar Ticket</Text>
+            </TouchableOpacity>
+          )}
           <TextInput
-            placeholder="Nombre"
+            placeholder={ticketPropietary ? ticketPropietary : "Nombre"}
             style={{ borderWidth: 1, padding: 10 }}
             onChangeText={(text) => {
               setPropietary(text);
             }}
+            value={propietary}
           />
           <TextInput
-            placeholder="Nota"
+            placeholder={ticketNote ? ticketNote : "Nota"}
             onChangeText={(text) => {
               setNote(text);
             }}
@@ -66,15 +101,13 @@ export function AsignedOwnerModal({
                 setVisibleState(false);
               }}
             >
-              <Text>Cerrar</Text>
+              <Text>Cancelar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
-              onPress={() => {
-                onPressFunction(raffleId, TicketNumber, propietary, note);
-              }}
+              onPress={handleAssign}
             >
-              <Text>Asignar</Text>
+              <Text>{isAsigned ? "Guardar" : "Asignar"}</Text>
             </TouchableOpacity>
           </View>
         </View>
