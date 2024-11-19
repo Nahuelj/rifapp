@@ -4,6 +4,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { Link, router, useLocalSearchParams } from "expo-router";
@@ -22,6 +23,7 @@ export default function raffleDetail() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [ticketSelected, setTicketSelected] = useState({});
   const [data, setData] = useState({});
+  console.log("🚀 ~ raffleDetail ~ data:", data);
   const [updateTrigger, setUpdateTrigger] = useState(0); // Nuevo estado
   const [visibleRunRaffle, setVisibleRunRaffle] = useState(false);
   const [raffleResult, setRaffleResult] = useState([]);
@@ -29,6 +31,7 @@ export default function raffleDetail() {
   useEffect(() => {
     async function fetchData() {
       const response = await getRaffleDetail(id);
+      console.log("🚀 ~ fetchData ~ response:", response);
       setData(response);
     }
     fetchData();
@@ -93,7 +96,17 @@ export default function raffleDetail() {
             borderColor: "red",
             padding: 10,
           }}
-          onPress={handleRunRaffle}
+          onPress={() => {
+            if (data.currentCapacity < parseInt(data.quantityWinners)) {
+              Alert.alert(
+                "No se puede realizar el sorteo",
+                `No es posible realizar el sorteo si no están asignados los números suficientes para la cantidad de ganadores establecidos.\n\nJugadores asignados: ${data.currentCapacity}\nJugadores requeridos como mínimo: ${data.quantityWinners}`,
+                [{ text: "OK", onPress: () => "" }]
+              );
+            } else {
+              handleRunRaffle();
+            }
+          }}
         >
           <Text>Sortear</Text>
         </TouchableOpacity>

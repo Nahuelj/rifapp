@@ -103,7 +103,13 @@ export function AsignedOwnerModal({
             </TouchableOpacity>
             <TouchableOpacity
               style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
-              onPress={handleAssign}
+              onPress={() => {
+                handleAssign();
+                setTimeout(() => {
+                  setPropietary("");
+                  setNote("");
+                }, 1000);
+              }}
             >
               <Text>{isAsigned ? "Guardar" : "Asignar"}</Text>
             </TouchableOpacity>

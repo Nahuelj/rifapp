@@ -94,8 +94,6 @@ export async function getRafflesByUserId(userId) {
 export async function getRaffleDetail(raffleId) {
   const userSession = await getSessionLocalId();
   const userId = userSession?.localId;
-  console.log("🚀 ~ getRaffleDetail ~ userId:", userId);
-  console.log("🚀 ~ getRaffleDetail ~ raffleId:", raffleId);
 
   try {
     const response = await fetch(
@@ -272,25 +270,33 @@ export async function getAssignedNumbers(raffleId) {
     }
 
     const data = await response.json();
-    console.log("🚀 ~ getAssignedNumbers ~ data:", data);
-
-    // Extraer la clave del objeto principal (por ejemplo, "8")
     const raffleKey = Object.keys(data)[0];
 
     if (!raffleKey || !data[raffleKey]?.numbers) {
       throw new Error("No se encontraron números en el sorteo.");
     }
 
-    // Obtener la cantidada de ganadores a generar
     const quantityWinners = data[raffleKey].quantityWinners;
-
-    // Filtrar los números asignados y mapear solo su valor
     const soldNumbers = data[raffleKey].numbers
       .filter((numberObj) => numberObj.isAsigned)
       .map((numberObj) => numberObj.number);
 
-    const result = runRaffle(soldNumbers, quantityWinners);
-    return result;
+    const winnerNumbers = runRaffle(soldNumbers, quantityWinners);
+
+    // Map winner numbers to full winner details
+    const winners = winnerNumbers.map((winnerNumber, index) => {
+      const winnerDetails = data[raffleKey].numbers.find(
+        (numberObj) => numberObj.number === winnerNumber
+      );
+
+      return {
+        position: index + 1,
+        number: winnerNumber,
+        owner: winnerDetails?.propietary || "Unknown",
+      };
+    });
+
+    return winners;
   } catch (error) {
     console.error("Error al obtener numeros asignados:", error);
     throw error;
@@ -408,6 +414,38 @@ export async function getRaffleWinners(raffleId) {
     const winners = data[raffleKey].winners;
 
     return winners;
+  } catch (error) {
+    console.error("Error al obtener numeros asignados:", error);
+    throw error;
+  }
+}
+
+export async function getRaffleNumbers(raffleId) {
+  const userSession = await getSessionLocalId();
+  const userId = userSession?.localId;
+
+  try {
+    const response = await fetch(
+      `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles.json?orderBy="id"&equalTo="${raffleId}"`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response?.status}`);
+    }
+
+    const data = await response.json();
+
+    // Extraer la clave del objeto principal (por ejemplo, "8")
+    const raffleKey = Object.keys(data)[0];
+
+    if (!raffleKey || !data[raffleKey]?.numbers) {
+      throw new Error("No se encontraron números en el sorteo.");
+    }
+
+    // Obtener la cantidada de ganadores a generar
+    const numbers = data[raffleKey].numbers;
+
+    return numbers;
   } catch (error) {
     console.error("Error al obtener numeros asignados:", error);
     throw error;
