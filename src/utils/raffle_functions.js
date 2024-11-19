@@ -381,3 +381,35 @@ export async function updateRaffleRealized(raffleId, winners) {
     throw error;
   }
 }
+
+export async function getRaffleWinners(raffleId) {
+  const userSession = await getSessionLocalId();
+  const userId = userSession?.localId;
+
+  try {
+    const response = await fetch(
+      `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles.json?orderBy="id"&equalTo="${raffleId}"`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response?.status}`);
+    }
+
+    const data = await response.json();
+
+    // Extraer la clave del objeto principal (por ejemplo, "8")
+    const raffleKey = Object.keys(data)[0];
+
+    if (!raffleKey || !data[raffleKey]?.winners) {
+      throw new Error("No se encontraron números en el sorteo.");
+    }
+
+    // Obtener la cantidada de ganadores a generar
+    const winners = data[raffleKey].winners;
+
+    return winners;
+  } catch (error) {
+    console.error("Error al obtener numeros asignados:", error);
+    throw error;
+  }
+}

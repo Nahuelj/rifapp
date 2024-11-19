@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
 import { RunRaffleModal } from "../../../src/components/RunRaffleModal";
@@ -106,7 +106,7 @@ export default function raffleDetail() {
             padding: 10,
           }}
           onPress={() => {
-            console.log("ver resultados");
+            router.push(`/results/${id}`);
           }}
         >
           <Text>Ver resultados</Text>
