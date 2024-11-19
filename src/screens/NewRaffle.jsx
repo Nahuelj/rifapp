@@ -67,10 +67,7 @@ export function NewRaffle() {
         onChangeText={(text) => setQuantityWinners(text)}
         value={quantityWinners}
       />
-      <TextInput
-        placeholder="+ Agregar imagen"
-        style={{ borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 }}
-      />
+
       <View style={{ flexDirection: "row", gap: 20, justifyContent: "center" }}>
         <Link href="/home" asChild>
           <Pressable
