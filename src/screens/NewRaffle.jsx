@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Link, router } from "expo-router";
 import { addNewRaffle } from "../utils/raffle_functions";
@@ -59,12 +59,14 @@ export function NewRaffle() {
         placeholder="Cantidad de personas"
         style={{ borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 }}
         onChangeText={(text) => setMaxCapacity(text)}
+        keyboardType="numeric"
         value={maxCapacity}
       />
       <TextInput
         placeholder="Cantidad de ganadores"
         style={{ borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 }}
         onChangeText={(text) => setQuantityWinners(text)}
+        keyboardType="numeric"
         value={quantityWinners}
       />
 
@@ -79,7 +81,17 @@ export function NewRaffle() {
 
         <Pressable
           style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
-          onPress={handleCreateRaffle} // Llamar a la función para crear el sorteo
+          onPress={() => {
+            if (raffleName && maxCapacity && quantityWinners) {
+              handleCreateRaffle();
+            } else {
+              Alert.alert(
+                "No se puede crear el sorteo",
+                `Complete los campos requeridos para crear un nuevo sorteo.`,
+                [{ text: "OK", onPress: () => "" }]
+              );
+            }
+          }} // Llamar a la función para crear el sorteo
         >
           <Text>+CREAR</Text>
         </Pressable>
