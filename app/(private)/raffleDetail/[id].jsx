@@ -14,6 +14,7 @@ import { RunRaffleModal } from "../../../src/components/RunRaffleModal";
 import {
   getRaffleDetail,
   removeTicket,
+  saveRaffleNumber,
 } from "../../../src/utils/raffle_functions";
 import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
 import { getAssignedNumbers } from "../../../src/utils/raffle_functions";
@@ -134,10 +135,12 @@ export default function raffleDetail() {
         raffleId={id}
         isAsigned={ticketSelected?.isAsigned}
         onPressFunction={updateRaffleNumber}
+        onSaveFunction={saveRaffleNumber}
         onRemoveFuntion={removeTicket}
         onUpdateComplete={handleUpdateComplete} // Para volver a renderizar el componente
         ticketPropietary={ticketSelected?.propietary}
         ticketNote={ticketSelected?.note}
+        isActive={data?.isActive}
       />
 
       <RunRaffleModal

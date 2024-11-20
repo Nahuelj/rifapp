@@ -9,7 +9,30 @@ export function NewRaffle() {
   const [maxCapacity, setMaxCapacity] = useState(false);
   const [quantityWinners, setQuantityWinners] = useState(false);
   const [session, setSession] = useState(null);
-  console.log("🚀 ~ NewRaffle ~ session:", session);
+
+  // Validation function
+  const validateRaffleConfiguration = (participants, totalWinners) => {
+    const MAX_PARTICIPANTS = 500;
+    const totalParticipants = participants;
+
+    if (totalParticipants > MAX_PARTICIPANTS) {
+      Alert.alert(
+        "Límite excedido",
+        `El número máximo de participantes es ${MAX_PARTICIPANTS}.`
+      );
+      return false;
+    }
+
+    if (totalWinners > totalParticipants) {
+      Alert.alert(
+        "Número de ganadores inválido",
+        "La cantidad de ganadores no puede ser mayor al número de participantes."
+      );
+      return false;
+    }
+
+    return true;
+  };
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -83,7 +106,19 @@ export function NewRaffle() {
           style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
           onPress={() => {
             if (raffleName && maxCapacity && quantityWinners) {
-              handleCreateRaffle();
+              const validation = validateRaffleConfiguration(
+                maxCapacity,
+                quantityWinners
+              );
+
+              if (validation) {
+                handleCreateRaffle();
+                setTimeout(() => {
+                  setRaffleName("");
+                  setMaxCapacity("");
+                  setQuantityWinners("");
+                }, 1000);
+              }
             } else {
               Alert.alert(
                 "No se puede crear el sorteo",
