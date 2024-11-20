@@ -1,10 +1,7 @@
-import { Stack, Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { Platform } from "react-native";
-import { useAuth } from "../src/hooks/useAuth";
 
 export default function Layout() {
-  useAuth();
-
   return (
     <Stack
       screenOptions={{
