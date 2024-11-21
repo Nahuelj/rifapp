@@ -1,16 +1,19 @@
 import {
   Text,
-  Image,
   Pressable,
   StyleSheet,
-  View,
   TextInput,
+  ImageBackground,
+  View,
 } from "react-native";
-import rifapp from "../../assets/app/rifapp_logo.png";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { BackHeader } from "../ui/BackHeader";
+import { RifappLogo } from "../ui/RifappLogo";
+import background from "../../assets/app/background.png";
+import { NormalText, UnderlineText } from "../ui/Texts";
 
 export function Signup() {
   const { registerWithEmailPassword } = useAuth();
@@ -18,67 +21,67 @@ export function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  return (
-    <SafeAreaView style={styles.cont}>
-      <View
-        style={{
-          flexDirection: "row",
-          gap: 10,
-        }}
-      >
-        <Link href={"/"}>
-          <Text>volver</Text>
-        </Link>
-        <Text>-</Text>
-        <Text>Crear una cuenta</Text>
-      </View>
-      <Image source={rifapp} />
-      <Text>Complete los siguientes campos para registrarse</Text>
-      <TextInput
-        placeholder="Nombre"
-        style={{ borderWidth: 1, width: 200 }}
-        onChangeText={(text) => setName(text)}
-        value={name}
-      ></TextInput>
-      <TextInput
-        textContentType="emailAddress"
-        placeholder="Correo electrónico"
-        style={{ borderWidth: 1, width: 200 }}
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      ></TextInput>
-      <TextInput
-        placeholder="Contraseña"
-        style={{ borderWidth: 1, width: 200 }}
-        secureTextEntry={true}
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-      ></TextInput>
-      <Pressable
-        style={styles.btn}
-        onPress={() => {
-          registerWithEmailPassword(email, password, name);
-        }}
-      >
-        <Text>REGISTRARME</Text>
-      </Pressable>
-      <Text>o registrate con Google</Text>
-      <Pressable
-        style={styles.btn}
-        onPress={() => {
-          console.log("");
-        }}
-      >
-        <Text>continuar con Google</Text>
-      </Pressable>
+  const handleBack = () => {
+    router.push("/");
+  };
 
-      <Text>
-        Ya tienes una cuenta?{"  "}
-        <Link href="/login">
-          <Text>Iniciar sesión</Text>
-        </Link>
-      </Text>
-    </SafeAreaView>
+  const handleLogin = () => {
+    router.push("/login");
+  };
+
+  return (
+    <ImageBackground source={background}>
+      <SafeAreaView style={styles.cont}>
+        <BackHeader onPressFunction={handleBack} content={"Volver al inicio"} />
+        <RifappLogo />
+
+        <NormalText
+          content={"Complete los siguientes campos para registrarse"}
+        />
+        <TextInput
+          placeholder="Nombre"
+          style={{ borderWidth: 1, width: 200 }}
+          onChangeText={(text) => setName(text)}
+          value={name}
+        ></TextInput>
+        <TextInput
+          textContentType="emailAddress"
+          placeholder="Correo electrónico"
+          style={{ borderWidth: 1, width: 200 }}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+        ></TextInput>
+        <TextInput
+          placeholder="Contraseña"
+          style={{ borderWidth: 1, width: 200 }}
+          secureTextEntry={true}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+        ></TextInput>
+        <Pressable
+          style={styles.btn}
+          onPress={() => {
+            registerWithEmailPassword(email, password, name);
+          }}
+        >
+          <Text>REGISTRARME</Text>
+        </Pressable>
+
+        <View
+          style={{
+            alignItems: "center",
+            width: 300,
+            marginBottom: 10,
+          }}
+        >
+          <NormalText content={"¿Ya tienes una cuenta?"} />
+          <UnderlineText
+            onPressFunction={handleLogin}
+            content={"Iniciar Sesión"}
+          />
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 

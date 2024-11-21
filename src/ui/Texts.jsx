@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useFonts } from "expo-font";
 import { Link } from "expo-router";
@@ -51,7 +51,7 @@ export const HeaderText = ({ content }) => {
   );
 };
 
-export const UnderlineText = ({ content, href }) => {
+export const UnderlineText = ({ content, onPressFunction }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Light": require("../../assets/fonts/Poppins/Poppins-Light.ttf"),
   });
@@ -69,11 +69,15 @@ export const UnderlineText = ({ content, href }) => {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return <Text>..</Text>;
+    return <Text>...</Text>;
   }
 
   return (
-    <Link href={href} asChild>
+    <Pressable
+      onPress={() => {
+        onPressFunction();
+      }}
+    >
       <View style={{ position: "relative", alignItems: "center" }}>
         <Text
           ref={textRef} // Asignamos la referencia
@@ -97,6 +101,6 @@ export const UnderlineText = ({ content, href }) => {
           }}
         />
       </View>
-    </Link>
+    </Pressable>
   );
 };

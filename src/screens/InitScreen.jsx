@@ -6,11 +6,12 @@ import {
   ActivityIndicator,
   View,
   ImageBackground,
+  Linking,
 } from "react-native";
 import rifapp from "../../assets/app/rifapp_logo.png";
 import background from "../../assets/app/background.png";
 
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { getSessionLocalId } from "../utils/storage_functions";
@@ -23,13 +24,11 @@ export const InitScreen = () => {
 
   useEffect(() => {
     async function getSession() {
-      console.log("obteniendo session..");
       const localId = await getSessionLocalId();
       if (localId) {
         // Si existe la sesión, redirigir a Home
         return router.replace("/home");
       }
-      console.log("🚀 ~ getSession ~ localId:", localId);
       setIsLoading(false); // Detener el loader si no hay sesión
     }
     getSession();
@@ -44,6 +43,24 @@ export const InitScreen = () => {
     );
   }
 
+  const handleLogin = () => {
+    router.push("/login");
+  };
+
+  const handleSignUp = () => {
+    router.push("/signup");
+  };
+
+  const handleRecover = () => {
+    router.push("/recover");
+  };
+
+  const handleTerms = () => {
+    Linking.openURL("https://www.tu-sitio-web.com").catch((err) =>
+      console.error("Error al abrir el sitio web:", err)
+    );
+  };
+
   return (
     <>
       <StatusBar style="light" />
@@ -56,16 +73,28 @@ export const InitScreen = () => {
           <NormalText
             content={"Gestiona tus sorteos de forma comoda y segura"}
           />
-          <LargeYellowButton content={"INICIAR SESIÓN"} />
+          <LargeYellowButton
+            content={"INICIAR SESIÓN"}
+            onPressFunction={handleLogin}
+          />
           <NormalText content={"Aun no tienes una cuenta ?"} />
-          <LargeYellowButton content={"CREAR CUENTA"} />
+          <LargeYellowButton
+            content={"CREAR CUENTA"}
+            onPressFunction={handleSignUp}
+          />
           <View style={{ marginBottom: 60 }}>
             <NormalText content={`Problemas para ingresar ?`} />
-            <UnderlineText href={""} content={"recuperar mi cuenta"} />
+            <UnderlineText
+              onPressFunction={handleRecover}
+              content={"recuperar mi cuenta"}
+            />
           </View>
 
           <View style={{ marginBottom: 10 }}>
-            <UnderlineText href={""} content={"terminos y condiciones"} />
+            <UnderlineText
+              onPressFunction={handleTerms}
+              content={"terminos y condiciones"}
+            />
           </View>
         </SafeAreaView>
       </ImageBackground>
