@@ -49,7 +49,7 @@ export const InitScreen = () => {
       <StatusBar style="light" />
       <ImageBackground source={background}>
         <SafeAreaView style={styles.cont}>
-          <View style={{ marginTop: 15 }}>
+          <View style={{ marginTop: 10 }}>
             <HeaderText content={"🎉 Te damos la Bienvenida 🥳"} />
           </View>
           <Image style={{ width: 330, height: 100 }} source={rifapp} />
@@ -63,7 +63,10 @@ export const InitScreen = () => {
             <NormalText content={`Problemas para ingresar ?`} />
             <UnderlineText href={""} content={"recuperar mi cuenta"} />
           </View>
-          <UnderlineText href={""} content={"terminos y condiciones"} />
+
+          <View style={{ marginBottom: 10 }}>
+            <UnderlineText href={""} content={"terminos y condiciones"} />
+          </View>
         </SafeAreaView>
       </ImageBackground>
     </>

@@ -50,6 +50,7 @@ export const HeaderText = ({ content }) => {
     </Text>
   );
 };
+
 export const UnderlineText = ({ content, href }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Light": require("../../assets/fonts/Poppins/Poppins-Light.ttf"),
@@ -77,7 +78,7 @@ export const UnderlineText = ({ content, href }) => {
         <Text
           ref={textRef} // Asignamos la referencia
           style={{
-            color: "#E0E0E0", // Color del texto
+            color: "#F3F8FF",
             fontSize: 18,
             textAlign: "center",
             fontFamily: "Poppins-Light", // Fuente personalizada
