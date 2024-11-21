@@ -1,12 +1,5 @@
-import {
-  Text,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  ImageBackground,
-  View,
-} from "react-native";
-import { Link, router } from "expo-router";
+import { StyleSheet, ImageBackground, View } from "react-native";
+import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
@@ -14,6 +7,8 @@ import { BackHeader } from "../ui/BackHeader";
 import { RifappLogo } from "../ui/RifappLogo";
 import background from "../../assets/app/background.png";
 import { NormalText, UnderlineText } from "../ui/Texts";
+import { LargeYellowButtonWithDisabled } from "../ui/Buttons";
+import { BasicInput, PasswordInput } from "../ui/Inputs";
 
 export function Signup() {
   const { registerWithEmailPassword } = useAuth();
@@ -29,6 +24,14 @@ export function Signup() {
     router.push("/login");
   };
 
+  const validateComplete = () => {
+    return !(name.trim() && email.trim() && password.trim());
+  };
+
+  const handleSignUp = async () => {
+    await registerWithEmailPassword(email, password, name);
+  };
+
   return (
     <ImageBackground source={background}>
       <SafeAreaView style={styles.cont}>
@@ -38,34 +41,25 @@ export function Signup() {
         <NormalText
           content={"Complete los siguientes campos para registrarse"}
         />
-        <TextInput
-          placeholder="Nombre"
-          style={{ borderWidth: 1, width: 200 }}
-          onChangeText={(text) => setName(text)}
-          value={name}
-        ></TextInput>
-        <TextInput
-          textContentType="emailAddress"
-          placeholder="Correo electrónico"
-          style={{ borderWidth: 1, width: 200 }}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-        ></TextInput>
-        <TextInput
-          placeholder="Contraseña"
-          style={{ borderWidth: 1, width: 200 }}
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-        ></TextInput>
-        <Pressable
-          style={styles.btn}
-          onPress={() => {
-            registerWithEmailPassword(email, password, name);
-          }}
-        >
-          <Text>REGISTRARME</Text>
-        </Pressable>
+
+        <BasicInput placeholder={"Nombre"} setState={setName} state={name} />
+        <BasicInput
+          placeholder={"Correo electronico"}
+          setState={setEmail}
+          state={email}
+        />
+
+        <PasswordInput
+          placeholder={"Contraseña"}
+          setState={setPassword}
+          state={password}
+        />
+
+        <LargeYellowButtonWithDisabled
+          content={"registrarme"}
+          onPressFunction={handleSignUp}
+          disabled={validateComplete()}
+        />
 
         <View
           style={{

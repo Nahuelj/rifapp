@@ -98,7 +98,7 @@ export const useAuth = () => {
         displayName,
       });
 
-      return data;
+      return router.replace("/");
     } catch (error) {
       console.error("Error registering user:", error);
       setError(error.message);

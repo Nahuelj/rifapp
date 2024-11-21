@@ -1,7 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useFonts } from "expo-font";
-import { Link } from "expo-router";
 
 export const NormalText = ({ content }) => {
   const [fontsLoaded] = useFonts({
