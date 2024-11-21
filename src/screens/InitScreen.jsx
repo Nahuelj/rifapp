@@ -4,12 +4,19 @@ import {
   Pressable,
   StyleSheet,
   ActivityIndicator,
+  View,
+  ImageBackground,
 } from "react-native";
 import rifapp from "../../assets/app/rifapp_logo.png";
+import background from "../../assets/app/background.png";
+
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { getSessionLocalId } from "../utils/storage_functions";
+import { NormalText, UnderlineText, HeaderText } from "../ui/Texts";
+import { LargeYellowButton } from "../ui/Buttons";
+import { StatusBar } from "expo-status-bar";
 
 export const InitScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,28 +45,28 @@ export const InitScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.cont}>
-      <Text>🎉 Te damos la Bienvenida 🥳</Text>
-      <Image source={rifapp} />
-      <Text>Gestiona tus sorteos de forma comoda y segura</Text>
-      <Pressable style={styles.btn}>
-        <Link href="/login">
-          <Text>INICIAR SESIÓN</Text>
-        </Link>
-      </Pressable>
-      <Text>aun no tienes una cuenta ?</Text>
-      <Pressable style={styles.btn}>
-        <Link href="/signup">
-          <Text>CREAR CUENTA</Text>
-        </Link>
-      </Pressable>
-
-      <Text>
-        Problemas para ingresar ?{"  "}
-        <Link href="/recover">Recuperar mi cuenta</Link>
-      </Text>
-      <Text>terminos y condiciones</Text>
-    </SafeAreaView>
+    <>
+      <StatusBar style="light" />
+      <ImageBackground source={background}>
+        <SafeAreaView style={styles.cont}>
+          <View style={{ marginTop: 15 }}>
+            <HeaderText content={"🎉 Te damos la Bienvenida 🥳"} />
+          </View>
+          <Image style={{ width: 330, height: 100 }} source={rifapp} />
+          <NormalText
+            content={"Gestiona tus sorteos de forma comoda y segura"}
+          />
+          <LargeYellowButton content={"INICIAR SESIÓN"} />
+          <NormalText content={"Aun no tienes una cuenta ?"} />
+          <LargeYellowButton content={"CREAR CUENTA"} />
+          <View style={{ marginBottom: 60 }}>
+            <NormalText content={`Problemas para ingresar ?`} />
+            <UnderlineText href={""} content={"recuperar mi cuenta"} />
+          </View>
+          <UnderlineText href={""} content={"terminos y condiciones"} />
+        </SafeAreaView>
+      </ImageBackground>
+    </>
   );
 };
 
