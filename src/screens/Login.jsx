@@ -1,70 +1,78 @@
-import {
-  Text,
-  Image,
-  Pressable,
-  StyleSheet,
-  View,
-  TextInput,
-} from "react-native";
-import rifapp from "../../assets/app/rifapp_logo.png";
-import { Link, router } from "expo-router";
+import { StyleSheet, ImageBackground, View } from "react-native";
+import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import background from "../../assets/app/background.png";
+import { RifappLogo } from "../ui/RifappLogo";
+import { BackHeader } from "../ui/BackHeader";
+import { NormalText, UnderlineText } from "../ui/Texts";
+import { LargeYellowButtonWithDisabled } from "../ui/Buttons";
+import { BasicInput, PasswordInput } from "../ui/Inputs";
 
 export function Login() {
   const { signInWithEmailPassword } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  return (
-    <SafeAreaView style={styles.cont}>
-      <View
-        style={{
-          flexDirection: "row",
-          gap: 10,
-        }}
-      >
-        <Link href={"/"}>
-          <Text>volver</Text>
-        </Link>
-        <Text>-</Text>
-        <Text>Iniciar sesión</Text>
-      </View>
-      <Image source={rifapp} />
-      <Text>Ingrese sus datos para iniciar sesión</Text>
-      <TextInput
-        placeholder="Correo electrónico"
-        style={{ borderWidth: 1, width: 200 }}
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      ></TextInput>
-      <TextInput
-        placeholder="Contraseña"
-        style={{ borderWidth: 1, width: 200 }}
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-      ></TextInput>
-      <Pressable
-        style={styles.btn}
-        onPress={() => {
-          signInWithEmailPassword(email, password);
-        }}
-      >
-        <Text>INICIAR SESIÓN</Text>
-      </Pressable>
-      <Text>o ingresa con Google</Text>
-      <Pressable style={styles.btn}>
-        <Text>ingresar con Google</Text>
-      </Pressable>
+  const handleBack = () => {
+    router.push("/");
+  };
 
-      <Text>
-        Aun no tienes cuenta?{"  "}
-        <Link href="/signup">
-          <Text>Registrarme</Text>
-        </Link>
-      </Text>
-    </SafeAreaView>
+  const handleSignUp = () => {
+    router.push("/signup");
+  };
+
+  const handleLogin = async () => {
+    await signInWithEmailPassword(email, password);
+  };
+
+  const validateComplete = () => {
+    return !(email.trim() && password.trim());
+  };
+
+  return (
+    <ImageBackground source={background}>
+      <SafeAreaView style={styles.cont}>
+        <BackHeader onPressFunction={handleBack} content={"Volver al inicio"} />
+
+        <RifappLogo />
+
+        <NormalText content={"Ingrese sus datos para iniciar sesión"} />
+
+        <BasicInput
+          placeholder={"Correo electronico"}
+          setState={setEmail}
+          state={email}
+        />
+
+        <PasswordInput
+          placeholder={"Contraseña"}
+          setState={setPassword}
+          state={password}
+        />
+
+        <LargeYellowButtonWithDisabled
+          content={"iniciar sesión"}
+          onPressFunction={handleLogin}
+          disabled={validateComplete()}
+        />
+
+        <View
+          style={{
+            alignItems: "center",
+            width: 300,
+            marginBottom: 10,
+          }}
+        >
+          <NormalText content={"¿No tienes cuenta?"} />
+          <UnderlineText
+            onPressFunction={handleSignUp}
+            content={"Registrarme"}
+          />
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
