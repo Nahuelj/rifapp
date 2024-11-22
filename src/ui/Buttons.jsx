@@ -1,4 +1,9 @@
-import { Pressable, Text } from "react-native";
+import {
+  Pressable,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { useFonts } from "expo-font";
 
@@ -91,6 +96,49 @@ export const LargeYellowButtonWithDisabled = ({
             paddingTop: 4,
           },
         ]}
+      >
+        {content}
+      </Text>
+    </Pressable>
+  );
+};
+
+export const NewRaffleButton = ({ content, onPressFunction }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Bold": require("../../assets/fonts/Poppins/Poppins-Bold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>..</Text>;
+  }
+
+  return (
+    <Pressable
+      style={{
+        width: 345,
+        height: 55,
+        backgroundColor: "#FFC600",
+        display: "flex",
+        alignContent: "center",
+        justifyContent: "center",
+        borderRadius: 10,
+      }}
+      onPress={() => {
+        onPressFunction();
+      }}
+    >
+      <Text
+        style={{
+          fontFamily: "Poppins-Bold",
+          color: "#49108B",
+          fontSize: 20,
+          maxWidth: 345,
+          textAlign: "center",
+          textTransform: "uppercase",
+          lineHeight: 30,
+          paddingTop: 4,
+          textAlignVertical: "center",
+        }}
       >
         {content}
       </Text>

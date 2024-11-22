@@ -8,7 +8,7 @@ import { getRafflesByUserId } from "../utils/raffle_functions";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import { getSessionLocalId } from "../utils/storage_functions";
-import { LargeYellowButton } from "../ui/Buttons";
+import { NewRaffleButton } from "../ui/Buttons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
@@ -87,7 +87,7 @@ export function Home() {
                   padding: 16,
                   paddingTop: 0,
                   gap: 20, // Funciona en versiones más recientes de React Native
-                  paddingBottom: 235,
+                  paddingBottom: 253,
                 }}
               />
             )}
@@ -103,7 +103,7 @@ export function Home() {
             padding: 15,
           }}
         >
-          <LargeYellowButton
+          <NewRaffleButton
             onPressFunction={handleNewRaffle}
             content={"+ NUEVO SORTEO"}
           />
