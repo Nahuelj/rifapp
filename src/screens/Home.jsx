@@ -1,13 +1,15 @@
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, ImageBackground } from "react-native";
+import background from "../../assets/app/background.png";
 import { HeaderHome } from "../components/HeaderHome";
 import { RaffleCard } from "../components/RaffleCard";
-import { BtnNewRaffle } from "../components/BtnNewRaffle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { getRafflesByUserId } from "../utils/raffle_functions";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import { getSessionLocalId } from "../utils/storage_functions";
+import { LargeYellowButton } from "../ui/Buttons";
+import { router } from "expo-router";
 
 export function Home() {
   const [session, setSession] = useState(null); // Estado para la sesión
@@ -45,6 +47,10 @@ export function Home() {
     }, [session]) // Dependencia para que se vuelva a ejecutar cuando la sesión cambie
   );
 
+  const handleNewRaffle = () => {
+    return router.push("/newRaffle");
+  };
+
   const renderRaffleCard = ({ item }) => (
     <RaffleCard
       img={item?.image}
@@ -57,33 +63,50 @@ export function Home() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View>
-        <HeaderHome />
+    <ImageBackground style={{ flex: 1 }} source={background}>
+      <SafeAreaView style={{ flex: 1, position: "relative" }}>
+        <View>
+          <HeaderHome />
 
-        <View style={{ height: 680 }}>
-          {data?.length === 0 ? (
-            <View style={{ margin: "auto", alignItems: "center", gap: 15 }}>
-              <Text>No tienes sorteos creados te invitamos a crear uno</Text>
-              <Text>⬇️⬇️⬇️</Text>
-            </View>
-          ) : (
-            <FlatList
-              data={data}
-              renderItem={renderRaffleCard}
-              initialNumToRender={20}
-              windowSize={5} // Ajusta este valor según tu necesidad
-              keyExtractor={(item) => item?.id}
-              contentContainerStyle={{
-                padding: 16,
-                gap: 20, // Funciona en versiones más recientes de React Native
-              }}
-            />
-          )}
+          <View>
+            {data?.length === 0 ? (
+              <View style={{ margin: "auto", alignItems: "center", gap: 15 }}>
+                <Text>No tienes sorteos creados te invitamos a crear uno</Text>
+                <Text>⬇️⬇️⬇️</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={data}
+                renderItem={renderRaffleCard}
+                initialNumToRender={20}
+                windowSize={5} // Ajusta este valor según tu necesidad
+                keyExtractor={(item) => item?.id}
+                contentContainerStyle={{
+                  padding: 16,
+                  paddingTop: 0,
+                  gap: 20, // Funciona en versiones más recientes de React Native
+                  paddingBottom: 225,
+                }}
+              />
+            )}
+          </View>
         </View>
-      </View>
-
-      <BtnNewRaffle />
-    </SafeAreaView>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            padding: 15,
+          }}
+        >
+          <LargeYellowButton
+            onPressFunction={handleNewRaffle}
+            content={"+ NUEVO SORTEO"}
+          />
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }

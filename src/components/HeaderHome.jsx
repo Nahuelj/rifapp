@@ -10,8 +10,12 @@ export function HeaderHome() {
         justifyContent: "center",
         gap: 30,
         padding: 10,
-        marginTop: 10,
-        marginBottom: 15,
+        height: 44,
+        width: 300,
+        alignSelf: "center",
+        backgroundColor: "red",
+        marginTop: 12,
+        marginBottom: 14,
       }}
     >
       <Link asChild href="/home">

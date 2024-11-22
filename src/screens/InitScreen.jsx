@@ -1,16 +1,11 @@
 import {
-  Text,
-  Image,
-  Pressable,
   StyleSheet,
   ActivityIndicator,
   View,
   ImageBackground,
   Linking,
 } from "react-native";
-import rifapp from "../../assets/app/rifapp_logo.png";
 import background from "../../assets/app/background.png";
-
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
@@ -18,6 +13,7 @@ import { getSessionLocalId } from "../utils/storage_functions";
 import { NormalText, UnderlineText, HeaderText } from "../ui/Texts";
 import { LargeYellowButton } from "../ui/Buttons";
 import { StatusBar } from "expo-status-bar";
+import { RifappLogo } from "../ui/RifappLogo";
 
 export const InitScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +65,8 @@ export const InitScreen = () => {
           <View style={{ marginTop: 10 }}>
             <HeaderText content={"🎉 Te damos la Bienvenida 🥳"} />
           </View>
-          <Image style={{ width: 330, height: 100 }} source={rifapp} />
+
+          <RifappLogo />
           <NormalText
             content={"Gestiona tus sorteos de forma comoda y segura"}
           />
