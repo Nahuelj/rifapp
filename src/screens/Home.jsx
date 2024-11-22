@@ -85,7 +85,7 @@ export function Home() {
                   padding: 16,
                   paddingTop: 0,
                   gap: 20, // Funciona en versiones más recientes de React Native
-                  paddingBottom: 225,
+                  paddingBottom: 235,
                 }}
               />
             )}
