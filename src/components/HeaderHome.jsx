@@ -1,33 +1,91 @@
-import { View, Text } from "react-native";
-import { Link } from "expo-router";
-import React from "react";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
+import { Link, usePathname } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
 
 export function HeaderHome() {
+  const [home, setHome] = useState(true);
+  const [account, setAccount] = useState(false);
+  const path = usePathname();
+
+  useEffect(() => {
+    if (path == "/home") {
+      setHome(true);
+      setAccount(false);
+    } else {
+      setHome(false);
+      setAccount(true);
+    }
+  }, [path]);
+
+  const [fontsLoaded] = useFonts({
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins/Poppins-SemiBold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>..</Text>;
+  }
+
   return (
     <View
       style={{
         flexDirection: "row",
-        justifyContent: "center",
-        gap: 30,
+        gap: 5,
         padding: 10,
-        height: 50,
+        height: 56,
         alignSelf: "center",
         backgroundColor: "#AD62CD",
-        marginTop: 12,
-        marginBottom: 14,
+        marginTop: 5,
+        marginBottom: 10,
         borderRadius: 10,
         width: 345,
       }}
     >
       <Link asChild href="/home">
-        <Text style={{ borderWidth: 1, borderBlockColor: "red", padding: 10 }}>
-          MIS SORTEOS
-        </Text>
+        <TouchableOpacity style={{ flex: 1, justifyContent: "center" }}>
+          <Text
+            style={[
+              {
+                fontFamily: "Poppins-SemiBold",
+                paddingHorizontal: 10,
+                backgroundColor: "#FFC600",
+                textAlign: "center",
+                fontSize: 18,
+                flex: 1,
+                textAlignVertical: "center",
+                borderRadius: 5,
+                lineHeight: 39,
+                color: "#49108B",
+              },
+              !home && { opacity: 0.6 },
+            ]}
+          >
+            MIS SORTEOS
+          </Text>
+        </TouchableOpacity>
       </Link>
       <Link asChild href="/account">
-        <Text style={{ borderWidth: 1, borderBlockColor: "red", padding: 10 }}>
-          MI CUENTA
-        </Text>
+        <TouchableOpacity style={{ flex: 1 }}>
+          <Text
+            style={[
+              {
+                fontFamily: "Poppins-SemiBold",
+                paddingHorizontal: 10,
+                backgroundColor: "#FFC600",
+                textAlign: "center",
+                fontSize: 18,
+                flex: 1,
+                textAlignVertical: "center",
+                borderRadius: 5,
+                lineHeight: 39,
+                color: "#49108B",
+              },
+              !account && { opacity: 0.6 },
+            ]}
+          >
+            MI CUENTA
+          </Text>
+        </TouchableOpacity>
       </Link>
     </View>
   );

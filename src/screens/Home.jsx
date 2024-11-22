@@ -10,6 +10,7 @@ import { useCallback } from "react";
 import { getSessionLocalId } from "../utils/storage_functions";
 import { LargeYellowButton } from "../ui/Buttons";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 export function Home() {
   const [session, setSession] = useState(null); // Estado para la sesión
@@ -64,6 +65,7 @@ export function Home() {
 
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
+      <StatusBar style="light" />
       <SafeAreaView style={{ flex: 1, position: "relative" }}>
         <View>
           <HeaderHome />

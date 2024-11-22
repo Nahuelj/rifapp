@@ -8,7 +8,7 @@ export default function Layout() {
         headerShown: false,
         animation: Platform.select({
           ios: "default",
-          android: "fade",
+          android: "slide_from_right",
         }),
       }}
     />

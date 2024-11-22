@@ -15,10 +15,6 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleBack = () => {
-    router.push("/");
-  };
-
   const handleSignUp = () => {
     router.push("/signup");
   };
@@ -34,7 +30,7 @@ export function Login() {
   return (
     <ImageBackground source={background}>
       <SafeAreaView style={styles.cont}>
-        <BackHeader onPressFunction={handleBack} content={"Volver al inicio"} />
+        <BackHeader content={"Volver al inicio"} />
 
         <RifappLogo />
 
