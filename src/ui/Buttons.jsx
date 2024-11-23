@@ -187,7 +187,7 @@ export const SmallYellowButtonWithDesabled = ({
         style={[
           {
             fontFamily: "Poppins-Bold",
-            color: "#49108B",
+            color: disabled ? "#49108B" : "white",
             fontSize: 20,
             maxWidth: 300,
             textAlign: "center",
@@ -230,7 +230,7 @@ export const SmallRedButton = ({ content, onPressFunction }) => {
       <Text
         style={{
           fontFamily: "Poppins-Bold",
-          color: "#49108B",
+          color: "white",
           fontSize: 20,
           maxWidth: 300,
           textAlign: "center",

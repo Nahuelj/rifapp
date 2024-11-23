@@ -3,12 +3,17 @@ import {
   View,
   Text,
   Modal,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   ScrollView,
   Alert,
+  ImageBackground,
+  StyleSheet,
 } from "react-native";
+import background from "../../assets/app/background_modal.png";
+import { NormalText } from "../ui/Texts";
+import { BasicInput, TextAreaInput } from "../ui/Inputs";
+import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 
 export function AsignedOwnerModal({
   isAsigned = false,
@@ -24,11 +29,9 @@ export function AsignedOwnerModal({
   isActive,
   onSaveFunction,
 }) {
-  // Initialize state with existing ticket values when modal opens
   const [propietary, setPropietary] = useState(ticketPropietary || "");
   const [note, setNote] = useState(ticketNote || "");
 
-  // Reset form when modal opens or closes
   useEffect(() => {
     if (visibleState) {
       setPropietary(ticketPropietary || "");
@@ -85,103 +88,92 @@ export function AsignedOwnerModal({
   const renderModalContent = () => {
     if (isActive) {
       return (
-        <>
-          <Text style={styles.modalText}>
-            Ticket {!isAsigned ? "Libre" : "Asignado"}
-          </Text>
-          <Text style={styles.modalText}>Asignar Ticket N°{TicketNumber}</Text>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ImageBackground style={styles.backgroundImage} source={background}>
+              <NormalText
+                color={"white"}
+                content={`Ticket ${!isAsigned ? "Libre" : "Asignado"}`}
+              />
+              <NormalText
+                color={"white"}
+                content={`Asignar Ticket N° ${TicketNumber}`}
+              />
 
-          {isAsigned && (
-            <TouchableOpacity
-              style={styles.removeButton}
-              onPress={handleRemove}
-            >
-              <Text style={styles.buttonText}>Eliminar Ticket</Text>
-            </TouchableOpacity>
-          )}
+              {isAsigned && (
+                <TouchableOpacity onPress={handleRemove}>
+                  <Text style={styles.removeText}>Eliminar Ticket</Text>
+                </TouchableOpacity>
+              )}
 
-          <TextInput
-            placeholder="Nombre"
-            style={styles.input}
-            onChangeText={(text) => {
-              setPropietary(text);
-            }}
-            value={propietary}
-          />
+              <View style={styles.inputContainer}>
+                <BasicInput
+                  setState={setPropietary}
+                  state={propietary}
+                  placeholder={"Nombre"}
+                />
 
-          <TextInput
-            placeholder="Nota"
-            onChangeText={(text) => {
-              setNote(text);
-            }}
-            style={styles.noteInput}
-            multiline={true}
-            numberOfLines={4}
-            value={note}
-          />
+                <TextAreaInput
+                  placeholder={"Nota"}
+                  setState={setNote}
+                  state={note}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <SmallRedButton
+                  content={"Cancelar"}
+                  onPressFunction={() => setVisibleState(false)}
+                />
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={() => {
-                setVisibleState(false);
-              }}
-            >
-              <Text>Cancelar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={() => {
-                if (isAsigned) {
-                  handleSave();
-                } else {
-                  handleAssign();
-                }
-              }}
-            >
-              <Text>{isAsigned ? "Guardar" : "Asignar"}</Text>
-            </TouchableOpacity>
+                <SmallYellowButtonWithDesabled
+                  onPressFunction={() => {
+                    if (isAsigned) {
+                      handleSave();
+                    } else {
+                      handleAssign();
+                    }
+                  }}
+                  content={isAsigned ? "Guardar" : "Asignar"}
+                />
+              </View>
+            </ImageBackground>
           </View>
-        </>
+        </View>
       );
     }
 
-    // Inactive raffle state
     return (
-      <>
-        <Text style={styles.modalText}>Ticket N°{TicketNumber}</Text>
+      <View style={styles.modalContainer}>
+        <View style={styles.inactiveModalContent}>
+          <Text style={styles.ticketNumber}>Ticket N°{TicketNumber}</Text>
 
-        {isAsigned ? (
-          <View style={styles.inactiveTicketContainer}>
-            <Text style={styles.ownerText}>
-              Propietario: {ticketPropietary}
-            </Text>
+          {isAsigned ? (
+            <View>
+              <Text style={styles.propietaryText}>
+                Propietario: {ticketPropietary}
+              </Text>
 
-            {/* Expanded note section with ScrollView for long notes */}
-            {ticketNote && (
-              <View style={styles.noteSection}>
-                <Text style={styles.noteTitleText}>Nota:</Text>
-                <ScrollView
-                  style={styles.noteScrollView}
-                  contentContainerStyle={styles.noteScrollViewContent}
-                >
-                  <Text style={styles.noteText}>{ticketNote}</Text>
-                </ScrollView>
-              </View>
-            )}
-          </View>
-        ) : (
-          <Text style={styles.freeTicketText}>Este ticket quedó libre</Text>
-        )}
+              {ticketNote && (
+                <View>
+                  <Text style={styles.noteLabel}>Nota:</Text>
+                  <ScrollView>
+                    <Text style={styles.noteText}>{ticketNote}</Text>
+                  </ScrollView>
+                </View>
+              )}
+            </View>
+          ) : (
+            <Text style={styles.freeTicketText}>Este ticket quedó libre</Text>
+          )}
 
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => setVisibleState(false)}
-        >
-          <Text>Cerrar</Text>
-        </TouchableOpacity>
-      </>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setVisibleState(false)}
+          >
+            <Text style={styles.closeButtonText}>Cerrar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
@@ -192,109 +184,86 @@ export function AsignedOwnerModal({
       visible={visibleState}
       onRequestClose={() => setVisibleState(false)}
     >
-      <View style={styles.modalBackground}>
-        <View style={styles.modalContainer}>{renderModalContent()}</View>
-      </View>
+      <View style={styles.overlay}>{renderModalContent()}</View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  modalBackground: {
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Overlay semi-transparente
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    width: "100%",
   },
-  modalContainer: {
-    width: 300,
-    maxHeight: "80%", // Limit height for better responsiveness
-    padding: 20,
-    paddingHorizontal: 40,
-    backgroundColor: "white",
+  modalContent: {
+    width: "90%",
+    maxWidth: 400,
     borderRadius: 10,
-    justifyContent: "space-evenly",
-    gap: 30,
+    overflow: "hidden",
   },
-  modalText: {
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
+  inactiveModalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "90%",
+    maxWidth: 400,
   },
-  input: {
-    borderWidth: 1,
-    padding: 10,
+  backgroundImage: {
+    width: "100%",
+    paddingVertical: 40,
+    alignItems: "center",
+  },
+  inputContainer: {
+    gap: 15,
+    marginTop: 10,
     marginBottom: 10,
-  },
-  noteInput: {
-    borderWidth: 1,
-    padding: 10,
-    height: 100,
-    textAlignVertical: "top",
+    width: "90%",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 20,
   },
-  cancelButton: {
-    borderWidth: 1,
-    borderColor: "red",
-    padding: 10,
+  removeText: {
+    color: "red",
+    marginTop: 10,
   },
-  submitButton: {
-    borderWidth: 1,
-    borderColor: "green",
-    padding: 10,
-  },
-  removeButton: {
-    borderWidth: 1,
-    borderColor: "red",
-    padding: 10,
+  ticketNumber: {
+    fontSize: 18,
+    fontWeight: "bold",
     marginBottom: 10,
   },
-  inactiveTicketContainer: {
-    backgroundColor: "#f0f0f0",
-    padding: 15,
-    borderRadius: 5,
-  },
-  ownerText: {
+  propietaryText: {
     fontSize: 16,
     marginBottom: 10,
   },
-  noteSection: {
-    marginTop: 5,
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
-    paddingTop: 10,
-  },
-  noteTitleText: {
-    fontSize: 14,
+  noteLabel: {
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
   },
-  noteScrollView: {
-    maxHeight: 150, // Limit note height
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    padding: 10,
-  },
-  noteScrollViewContent: {
-    flexGrow: 1,
-  },
   noteText: {
-    color: "#333",
     fontSize: 14,
   },
   freeTicketText: {
-    color: "red",
-    textAlign: "center",
     fontSize: 16,
+    fontStyle: "italic",
   },
   closeButton: {
-    borderWidth: 1,
-    borderColor: "gray",
+    marginTop: 20,
     padding: 10,
-    alignSelf: "center",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    fontSize: 16,
   },
 });

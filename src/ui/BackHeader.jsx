@@ -1,6 +1,8 @@
 import { View, Pressable, Image, Text } from "react-native";
 import { HeaderText } from "./Texts";
 import arrow from "../../assets/app/icons/left_arrow_purple.png";
+import arrow_white from "../../assets/app/icons/left_arrow.png";
+
 import { Link } from "expo-router";
 import { useFonts } from "expo-font";
 
@@ -18,7 +20,7 @@ export function BackHeader({ content }) {
         }}
       >
         <View>
-          <Image source={arrow} />
+          <Image source={arrow_white} />
         </View>
 
         <View style={{ marginTop: 1 }}>

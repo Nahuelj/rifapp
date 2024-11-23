@@ -11,6 +11,7 @@ export function BasicInput({ placeholder, setState, state }) {
         height: 42,
         backgroundColor: "white",
         borderRadius: 5,
+        alignSelf: "center",
       }}
     >
       <TextInput
@@ -25,6 +26,36 @@ export function BasicInput({ placeholder, setState, state }) {
           fontSize: 20,
           textAlignVertical: "center", // Centra verticalmente el texto
           paddingHorizontal: 10, // Espaciado horizontal
+        }}
+      />
+    </View>
+  );
+}
+
+export function TextAreaInput({ placeholder, setState, state }) {
+  return (
+    <View
+      style={{
+        backgroundColor: "white",
+        borderRadius: 5,
+        alignSelf: "center",
+      }}
+    >
+      <TextInput
+        multiline={true}
+        numberOfLines={4}
+        onChangeText={(text) => {
+          setState(text);
+        }}
+        value={state}
+        placeholder={placeholder}
+        style={{
+          width: 300,
+          height: 100,
+          color: "purple",
+          fontSize: 20,
+          textAlignVertical: "top", // Centra verticalmente el texto
+          padding: 10, // Espaciado horizontal
         }}
       />
     </View>
