@@ -1,13 +1,12 @@
-import {
-  Pressable,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native";
+import { Pressable, Text } from "react-native";
 import React from "react";
 import { useFonts } from "expo-font";
 
-export const LargeYellowButton = ({ content, onPressFunction }) => {
+export const LargeYellowButton = ({
+  content,
+  onPressFunction,
+  backgroundColor,
+}) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins/Poppins-Bold.ttf"),
   });
@@ -21,7 +20,7 @@ export const LargeYellowButton = ({ content, onPressFunction }) => {
       style={{
         width: 300,
         height: 55,
-        backgroundColor: "#FFC600",
+        backgroundColor: backgroundColor ? backgroundColor : "#FFC600",
         display: "flex",
         alignContent: "center",
         justifyContent: "center",

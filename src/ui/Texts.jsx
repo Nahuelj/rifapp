@@ -28,6 +28,62 @@ export const NormalText = ({ content, color, formatText }) => {
   );
 };
 
+export const NameText = ({ content, color, formatText }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Bold": require("../../assets/fonts/Poppins/Poppins-Bold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>..</Text>;
+  }
+
+  return (
+    <Text
+      numberOfLines={1}
+      ellipsizeMode="tail"
+      style={{
+        fontFamily: "Poppins-Bold",
+        color: color ? color : "#F3F8FF", // Color del texto
+        fontSize: 25,
+        maxWidth: 300,
+        textAlign: "center",
+        alignSelf: "center",
+        textTransform: formatText ? formatText : "none",
+      }}
+    >
+      {content}
+    </Text>
+  );
+};
+
+export const EmailText = ({ content, color, formatText }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins/Poppins-Regular.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>..</Text>;
+  }
+
+  return (
+    <Text
+      numberOfLines={1}
+      ellipsizeMode="tail"
+      style={{
+        fontFamily: "Poppins-Regular",
+        color: color ? color : "#F3F8FF", // Color del texto
+        fontSize: 18,
+        maxWidth: 300,
+        textAlign: "center",
+        alignSelf: "center",
+        textTransform: formatText ? formatText : "none",
+      }}
+    >
+      {content}
+    </Text>
+  );
+};
+
 export const HeaderText = ({ content }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins/Poppins-Regular.ttf"),
