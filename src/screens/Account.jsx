@@ -72,11 +72,23 @@ export function Account() {
 
         <View style={{ marginTop: 30, gap: 30 }}>
           <LargeYellowButton
+            onPressFunction={() => {
+              console.log("función en desarrollo");
+            }}
             content={"Cambiar nombre"}
             backgroundColor={"white"}
           />
-          <LargeYellowButton content={"Seguridad"} backgroundColor={"white"} />
           <LargeYellowButton
+            onPressFunction={() => {
+              console.log("función en desarrollo");
+            }}
+            content={"Seguridad"}
+            backgroundColor={"white"}
+          />
+          <LargeYellowButton
+            onPressFunction={() => {
+              console.log("función en desarrollo");
+            }}
             content={"Cambiar idioma"}
             backgroundColor={"white"}
           />
@@ -88,10 +100,16 @@ export function Account() {
             backgroundColor={"white"}
           />
           <LargeYellowButton
+            onPressFunction={() => {
+              console.log("función en desarrollo");
+            }}
             content={"Eliminar cuenta"}
             backgroundColor={"white"}
           />
           <LargeYellowButton
+            onPressFunction={() => {
+              console.log("función en desarrollo");
+            }}
             content={"Terminos y condiciones"}
             backgroundColor={"white"}
           />
