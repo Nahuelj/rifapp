@@ -91,9 +91,8 @@ export function Home() {
                   windowSize={5} // Ajusta este valor según tu necesidad
                   keyExtractor={(item) => item?.id}
                   contentContainerStyle={{
-                    padding: 16,
-                    paddingTop: 0,
                     gap: 15, // Funciona en versiones más recientes de React Native
+                    paddingBottom: 50,
                   }}
                 />
               </View>

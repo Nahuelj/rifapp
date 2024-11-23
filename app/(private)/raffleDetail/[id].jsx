@@ -5,9 +5,10 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
 import { RunRaffleModal } from "../../../src/components/RunRaffleModal";
@@ -18,6 +19,10 @@ import {
 } from "../../../src/utils/raffle_functions";
 import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
 import { getAssignedNumbers } from "../../../src/utils/raffle_functions";
+import { BackHeaderRaffle } from "../../../src/ui/BackHeader";
+import background from "../../../assets/app/background.png";
+import { StatusBar } from "expo-status-bar";
+import { LargeYellowButton } from "../../../src/ui/Buttons";
 
 export default function raffleDetail() {
   const { id } = useLocalSearchParams();
@@ -68,89 +73,73 @@ export default function raffleDetail() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Link href="/home">
-          <Text>Volver</Text>
-        </Link>
-        <Text>{data.title}</Text>
-      </View>
+    <ImageBackground style={{ flex: 1 }} source={background}>
+      <StatusBar style="light" />
+      <SafeAreaView style={styles.container}>
+        <BackHeaderRaffle raffleTitle={data.title} />
 
-      <View style={{ height: 715 }}>
-        <FlatList
-          data={data.numbers}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.number.toString()}
-          numColumns={5}
-          columnWrapperStyle={styles.row}
-          contentContainerStyle={styles.listContainer}
-          initialNumToRender={20}
-          windowSize={5} // Ajusta este valor según tu necesidad
+        <View style={{ height: 715 }}>
+          <FlatList
+            data={data.numbers}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.number.toString()}
+            numColumns={5}
+            columnWrapperStyle={styles.row}
+            contentContainerStyle={styles.listContainer}
+            initialNumToRender={20}
+            windowSize={5} // Ajusta este valor según tu necesidad
+          />
+        </View>
+
+        {data.isActive ? (
+          <LargeYellowButton
+            onPressFunction={() => {
+              if (data.currentCapacity < parseInt(data.quantityWinners)) {
+                Alert.alert(
+                  "No se puede realizar el sorteo",
+                  `No es posible realizar el sorteo si no están asignados los números suficientes para la cantidad de ganadores establecidos.\n\nJugadores asignados: ${data.currentCapacity}\nJugadores requeridos como mínimo: ${data.quantityWinners}`,
+                  [{ text: "OK", onPress: () => "" }]
+                );
+              } else {
+                handleRunRaffle();
+              }
+            }}
+            content={"Sortear"}
+          />
+        ) : (
+          <LargeYellowButton
+            onPressFunction={() => {
+              router.push(`/results/${id}`);
+            }}
+            content={"Ver resultados"}
+          />
+        )}
+
+        <AsignedOwnerModal
+          visibleState={visibleModal}
+          setVisibleState={setVisibleModal}
+          TicketNumber={ticketSelected?.number}
+          TicketStatus={ticketSelected?.isAsigned}
+          raffleId={id}
+          isAsigned={ticketSelected?.isAsigned}
+          onPressFunction={updateRaffleNumber}
+          onSaveFunction={saveRaffleNumber}
+          onRemoveFuntion={removeTicket}
+          onUpdateComplete={handleUpdateComplete} // Para volver a renderizar el componente
+          ticketPropietary={ticketSelected?.propietary}
+          ticketNote={ticketSelected?.note}
+          isActive={data?.isActive}
         />
-      </View>
 
-      {data.isActive ? (
-        <TouchableOpacity
-          style={{
-            margin: "auto",
-            borderWidth: 1,
-            borderColor: "red",
-            padding: 10,
-          }}
-          onPress={() => {
-            if (data.currentCapacity < parseInt(data.quantityWinners)) {
-              Alert.alert(
-                "No se puede realizar el sorteo",
-                `No es posible realizar el sorteo si no están asignados los números suficientes para la cantidad de ganadores establecidos.\n\nJugadores asignados: ${data.currentCapacity}\nJugadores requeridos como mínimo: ${data.quantityWinners}`,
-                [{ text: "OK", onPress: () => "" }]
-              );
-            } else {
-              handleRunRaffle();
-            }
-          }}
-        >
-          <Text>Sortear</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={{
-            margin: "auto",
-            borderWidth: 1,
-            borderColor: "red",
-            padding: 10,
-          }}
-          onPress={() => {
-            router.push(`/results/${id}`);
-          }}
-        >
-          <Text>Ver resultados</Text>
-        </TouchableOpacity>
-      )}
-
-      <AsignedOwnerModal
-        visibleState={visibleModal}
-        setVisibleState={setVisibleModal}
-        TicketNumber={ticketSelected?.number}
-        TicketStatus={ticketSelected?.isAsigned}
-        raffleId={id}
-        isAsigned={ticketSelected?.isAsigned}
-        onPressFunction={updateRaffleNumber}
-        onSaveFunction={saveRaffleNumber}
-        onRemoveFuntion={removeTicket}
-        onUpdateComplete={handleUpdateComplete} // Para volver a renderizar el componente
-        ticketPropietary={ticketSelected?.propietary}
-        ticketNote={ticketSelected?.note}
-        isActive={data?.isActive}
-      />
-
-      <RunRaffleModal
-        visibleState={visibleRunRaffle}
-        setVisibleState={setVisibleRunRaffle}
-        raffleId={id}
-        raffleResult={raffleResult}
-        onUpdateComplete={handleRaffleComplete} // Para volver a renderizar el componente
-      />
-    </SafeAreaView>
+        <RunRaffleModal
+          visibleState={visibleRunRaffle}
+          setVisibleState={setVisibleRunRaffle}
+          raffleId={id}
+          raffleResult={raffleResult}
+          onUpdateComplete={handleRaffleComplete} // Para volver a renderizar el componente
+        />
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 

@@ -26,6 +26,7 @@ export const LargeYellowButton = ({ content, onPressFunction }) => {
         alignContent: "center",
         justifyContent: "center",
         borderRadius: 50,
+        alignSelf: "center",
       }}
       onPress={() => {
         onPressFunction();
