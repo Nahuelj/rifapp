@@ -58,6 +58,7 @@ export function BackHeaderRaffle({ raffleTitle }) {
             borderRadius: 5,
             paddingHorizontal: 10,
             width: "90%",
+            maxWidth: 360,
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "row",

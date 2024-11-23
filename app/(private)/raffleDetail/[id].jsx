@@ -29,7 +29,6 @@ export default function raffleDetail() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [ticketSelected, setTicketSelected] = useState({});
   const [data, setData] = useState({});
-  console.log("🚀 ~ raffleDetail ~ data:", data);
   const [updateTrigger, setUpdateTrigger] = useState(0); // Nuevo estado
   const [visibleRunRaffle, setVisibleRunRaffle] = useState(false);
   const [raffleResult, setRaffleResult] = useState([]);
@@ -68,7 +67,9 @@ export default function raffleDetail() {
       }}
       style={[styles.gridItem, item?.isAsigned && styles.asigned]}
     >
-      <Text style={[item.isAsigned && styles.asignedText]}>{item.number}</Text>
+      <Text style={[item.isAsigned && styles.asignedText, { fontSize: 20 }]}>
+        {item.number}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -109,7 +110,9 @@ export default function raffleDetail() {
         ) : (
           <LargeYellowButton
             onPressFunction={() => {
-              router.push(`/results/${id}`);
+              router.push(
+                `/results/${id}?name=${data?.title}&&countWinner=${data?.quantityWinners}`
+              );
             }}
             content={"Ver resultados"}
           />
@@ -169,10 +172,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 7,
+    backgroundColor: "white",
   },
   asigned: {
     backgroundColor: "purple",
     color: "white",
+    opacity: 0.25,
   },
   asignedText: {
     color: "white",
