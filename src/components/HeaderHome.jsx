@@ -36,7 +36,7 @@ export function HeaderHome() {
         alignSelf: "center",
         backgroundColor: "#AD62CD",
         marginTop: 5,
-        marginBottom: 15,
+        marginBottom: 11,
         borderRadius: 10,
         width: 345,
       }}

@@ -12,14 +12,23 @@ import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 export function NewRaffle() {
   const router = useRouter();
   const [raffleName, setRaffleName] = useState("");
+  console.log("🚀 ~ NewRaffle ~ raffleName:", raffleName);
   const [maxCapacity, setMaxCapacity] = useState("");
+  console.log("🚀 ~ NewRaffle ~ maxCapacity:", maxCapacity);
   const [quantityWinners, setQuantityWinners] = useState("");
+  console.log("🚀 ~ NewRaffle ~ quantityWinners:", quantityWinners);
   const [session, setSession] = useState(null);
 
-  // Validation function
   const validateRaffleConfiguration = (participants, totalWinners) => {
     const MAX_PARTICIPANTS = 500;
-    const totalParticipants = participants;
+    const totalParticipants = parseInt(participants, 10); // Convertir a número
+    const winners = parseInt(totalWinners, 10); // Convertir a número
+
+    // Verificar que los valores son números válidos
+    if (isNaN(totalParticipants) || isNaN(winners)) {
+      Alert.alert("Error", "Por favor ingrese números válidos");
+      return false;
+    }
 
     if (totalParticipants > MAX_PARTICIPANTS) {
       Alert.alert(
@@ -29,7 +38,7 @@ export function NewRaffle() {
       return false;
     }
 
-    if (totalWinners > totalParticipants) {
+    if (winners > totalParticipants) {
       Alert.alert(
         "Número de ganadores inválido",
         "La cantidad de ganadores no puede ser mayor al número de participantes."
@@ -102,6 +111,7 @@ export function NewRaffle() {
             width: 300,
             alignSelf: "center",
             height: 400,
+            marginBottom: 5,
           }}
         >
           <BasicInput

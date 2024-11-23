@@ -72,27 +72,35 @@ export function Home() {
 
           <View>
             {data?.length === 0 ? (
-              <View style={{ margin: "auto", alignItems: "center", gap: 15 }}>
+              <View
+                style={{
+                  margin: "auto",
+                  alignItems: "center",
+                  gap: 15,
+                }}
+              >
                 <Text>No tienes sorteos creados te invitamos a crear uno</Text>
                 <Text>⬇️⬇️⬇️</Text>
               </View>
             ) : (
-              <FlatList
-                data={data}
-                renderItem={renderRaffleCard}
-                initialNumToRender={20}
-                windowSize={5} // Ajusta este valor según tu necesidad
-                keyExtractor={(item) => item?.id}
-                contentContainerStyle={{
-                  padding: 16,
-                  paddingTop: 0,
-                  gap: 20, // Funciona en versiones más recientes de React Native
-                  paddingBottom: 253,
-                }}
-              />
+              <View style={{ height: 685 }}>
+                <FlatList
+                  data={data}
+                  renderItem={renderRaffleCard}
+                  initialNumToRender={20}
+                  windowSize={5} // Ajusta este valor según tu necesidad
+                  keyExtractor={(item) => item?.id}
+                  contentContainerStyle={{
+                    padding: 16,
+                    paddingTop: 0,
+                    gap: 15, // Funciona en versiones más recientes de React Native
+                  }}
+                />
+              </View>
             )}
           </View>
         </View>
+
         <View
           style={{
             justifyContent: "center",
