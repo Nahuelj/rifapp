@@ -1,13 +1,19 @@
-import { View, Text, TextInput, Pressable, Alert } from "react-native";
+import { View, Alert, ImageBackground } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Link, router } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { addNewRaffle } from "../utils/raffle_functions";
+import { LargeText, NormalText } from "../ui/Texts";
 import { getSessionLocalId } from "../utils/storage_functions"; // Asegúrate de que esta importación esté presente
+import { SafeAreaView } from "react-native-safe-area-context";
+import background from "../../assets/app/background.png";
+import { BasicInput, NumericInput } from "../ui/Inputs";
+import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 
 export function NewRaffle() {
-  const [raffleName, setRaffleName] = useState(false);
-  const [maxCapacity, setMaxCapacity] = useState(false);
-  const [quantityWinners, setQuantityWinners] = useState(false);
+  const router = useRouter();
+  const [raffleName, setRaffleName] = useState("");
+  const [maxCapacity, setMaxCapacity] = useState("");
+  const [quantityWinners, setQuantityWinners] = useState("");
   const [session, setSession] = useState(null);
 
   // Validation function
@@ -46,6 +52,12 @@ export function NewRaffle() {
 
   // Verifica si la sesión está disponible antes de permitir la creación del sorteo
   const handleCreateRaffle = async () => {
+    const result = validateRaffleConfiguration(maxCapacity, quantityWinners);
+
+    if (!result) {
+      return null;
+    }
+
     if (!session?.localId) {
       console.log("No se encontró sesión, no se puede crear el sorteo.");
       return;
@@ -62,75 +74,71 @@ export function NewRaffle() {
     router.push("/home");
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
+  const validateComplete = () => {
+    return !(raffleName.trim() && maxCapacity.trim() && quantityWinners.trim());
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "space-evenly",
-        paddingHorizontal: 70,
-      }}
-    >
-      <Text style={{ marginHorizontal: "auto" }}>CREAR SORTEO 🎁</Text>
-      <Text>Complete los siguientes campos para crear un nuevo sorteo</Text>
-      <TextInput
-        placeholder="Nombre del sorteo"
-        style={{ borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 }}
-        onChangeText={(text) => setRaffleName(text)}
-        value={raffleName}
-      />
-      <TextInput
-        placeholder="Cantidad de personas"
-        style={{ borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 }}
-        onChangeText={(text) => setMaxCapacity(text)}
-        keyboardType="numeric"
-        value={maxCapacity}
-      />
-      <TextInput
-        placeholder="Cantidad de ganadores"
-        style={{ borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 }}
-        onChangeText={(text) => setQuantityWinners(text)}
-        keyboardType="numeric"
-        value={quantityWinners}
-      />
+    <ImageBackground style={{ flex: 1 }} source={background}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: "space-evenly",
+          paddingHorizontal: 70,
+        }}
+      >
+        <LargeText content={"CREAR SORTEO 🎁"} />
+        <NormalText
+          content={"Complete los siguientes campos para crear un nuevo sorteo"}
+        />
 
-      <View style={{ flexDirection: "row", gap: 20, justifyContent: "center" }}>
-        <Link href="/home" asChild>
-          <Pressable
-            style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
-          >
-            <Text>VOLVER</Text>
-          </Pressable>
-        </Link>
-
-        <Pressable
-          style={{ borderWidth: 1, borderColor: "red", padding: 10 }}
-          onPress={() => {
-            if (raffleName && maxCapacity && quantityWinners) {
-              const validation = validateRaffleConfiguration(
-                maxCapacity,
-                quantityWinners
-              );
-
-              if (validation) {
-                handleCreateRaffle();
-                setTimeout(() => {
-                  setRaffleName("");
-                  setMaxCapacity("");
-                  setQuantityWinners("");
-                }, 1000);
-              }
-            } else {
-              Alert.alert(
-                "No se puede crear el sorteo",
-                `Complete los campos requeridos para crear un nuevo sorteo.`,
-                [{ text: "OK", onPress: () => "" }]
-              );
-            }
-          }} // Llamar a la función para crear el sorteo
+        <View
+          style={{
+            gap: 40,
+            width: 300,
+            alignSelf: "center",
+            height: 400,
+          }}
         >
-          <Text>+CREAR</Text>
-        </Pressable>
-      </View>
-    </View>
+          <BasicInput
+            setState={setRaffleName}
+            state={raffleName}
+            placeholder={"Nombre del sorteo"}
+          />
+          <NumericInput
+            setState={setMaxCapacity}
+            state={maxCapacity}
+            placeholder={"Cantidad de personas"}
+          />
+          <NumericInput
+            setState={setQuantityWinners}
+            state={quantityWinners}
+            placeholder={"Cantidad de ganadores"}
+          />
+
+          <NormalText
+            content={
+              "Ingresa el nombre del sorteo, el número de participantes y la cantidad de ganadores que se generaran al realizar el sorteo"
+            }
+          />
+        </View>
+
+        <View
+          style={{ flexDirection: "row", gap: 15, justifyContent: "center" }}
+        >
+          <SmallRedButton onPressFunction={handleBack} content={"Volver"} />
+
+          <SmallYellowButtonWithDesabled
+            onPressFunction={handleCreateRaffle}
+            content={"+ Crear"}
+            disabled={validateComplete()}
+          />
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }

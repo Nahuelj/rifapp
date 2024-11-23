@@ -103,3 +103,28 @@ export const UnderlineText = ({ content, onPressFunction }) => {
     </Pressable>
   );
 };
+
+export const LargeText = ({ content }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins/Poppins-Regular.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>..</Text>;
+  }
+
+  return (
+    <Text
+      style={{
+        fontFamily: "Poppins-Regular",
+        color: "#F3F8FF", // Color del texto
+        fontSize: 32,
+        width: 400,
+        alignSelf: "center",
+        textAlign: "center",
+      }}
+    >
+      {content}
+    </Text>
+  );
+};

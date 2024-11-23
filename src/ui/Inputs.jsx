@@ -31,6 +31,35 @@ export function BasicInput({ placeholder, setState, state }) {
   );
 }
 
+export function NumericInput({ placeholder, setState, state }) {
+  return (
+    <View
+      style={{
+        width: 300,
+        height: 42,
+        backgroundColor: "white",
+        borderRadius: 5,
+      }}
+    >
+      <TextInput
+        keyboardType="numeric"
+        onChangeText={(text) => {
+          setState(text);
+        }}
+        value={state}
+        placeholder={placeholder}
+        style={{
+          flex: 1, // Ocupa todo el espacio disponible
+          color: "purple",
+          fontSize: 20,
+          textAlignVertical: "center", // Centra verticalmente el texto
+          paddingHorizontal: 10, // Espaciado horizontal
+        }}
+      />
+    </View>
+  );
+}
+
 export function PasswordInput({ placeholder, setState, state }) {
   const [isHidden, setIsHidden] = useState(true);
 
