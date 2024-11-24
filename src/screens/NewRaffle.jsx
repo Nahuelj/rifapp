@@ -12,11 +12,8 @@ import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 export function NewRaffle() {
   const router = useRouter();
   const [raffleName, setRaffleName] = useState("");
-  console.log("🚀 ~ NewRaffle ~ raffleName:", raffleName);
   const [maxCapacity, setMaxCapacity] = useState("");
-  console.log("🚀 ~ NewRaffle ~ maxCapacity:", maxCapacity);
   const [quantityWinners, setQuantityWinners] = useState("");
-  console.log("🚀 ~ NewRaffle ~ quantityWinners:", quantityWinners);
   const [session, setSession] = useState(null);
 
   const validateRaffleConfiguration = (participants, totalWinners) => {
@@ -52,7 +49,6 @@ export function NewRaffle() {
   useEffect(() => {
     const fetchSession = async () => {
       const sessionData = await getSessionLocalId();
-      console.log("🚀 ~ fetchSession ~ sessionData:", sessionData);
       setSession(sessionData);
     };
 
@@ -68,18 +64,16 @@ export function NewRaffle() {
     }
 
     if (!session?.localId) {
-      console.log("No se encontró sesión, no se puede crear el sorteo.");
+      console.error("No se encontró sesión, no se puede crear el sorteo.");
       return;
     }
 
-    console.log("Creando sorteo....");
     await addNewRaffle(
       session.localId, // Usar session.localId en lugar de session?.localId
       raffleName,
       maxCapacity,
       quantityWinners
     );
-    console.log("Sorteo creado.");
     router.push("/home");
   };
 

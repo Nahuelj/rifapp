@@ -10,8 +10,6 @@ import { LargeText, NormalText } from "../../../src/ui/Texts";
 
 export default function results() {
   const { id, name, countWinner } = useLocalSearchParams();
-  console.log("🚀 ~ results ~ countWinner:", countWinner);
-  console.log("🚀 ~ results ~ name:", name);
   const [winners, setWinners] = useState([]);
 
   useEffect(() => {

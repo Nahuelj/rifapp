@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 
 const firebase_key = process.env.EXPO_PUBLIC_FIREBASE_KEY;
-console.log("🚀 ~ firebase_key:", firebase_key);
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,7 +34,6 @@ export const useAuth = () => {
       );
 
       if (response.ok) {
-        console.log("Datos actualizados exitosamente");
       } else {
         console.error("Error al actualizar los datos:", response.status);
       }

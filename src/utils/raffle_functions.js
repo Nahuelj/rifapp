@@ -422,7 +422,6 @@ export async function updateRaffleRealized(raffleId, winners) {
     const raffleIndex = Object.keys(raffles).find(
       (key) => raffles[key].id === raffleId
     );
-    console.log("🚀 ~ updateRaffleRealized ~ raffleIndex:", raffleIndex);
 
     if (!raffleIndex) {
       throw new Error("Raffle not found");

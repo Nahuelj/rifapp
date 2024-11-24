@@ -19,7 +19,6 @@ export function Home() {
   useEffect(() => {
     const fetchSession = async () => {
       const sessionData = await getSessionLocalId();
-      console.log("🚀 ~ fetchSession ~ sessionData:", sessionData);
       setSession(sessionData);
     };
 
@@ -40,11 +39,7 @@ export function Home() {
       if (session) {
         fetch();
       }
-      return () => {
-        console.log(
-          "ya no estoy focusadooo ---------------------------------------------------------------"
-        );
-      };
+      return () => {};
     }, [session]) // Dependencia para que se vuelva a ejecutar cuando la sesión cambie
   );
 

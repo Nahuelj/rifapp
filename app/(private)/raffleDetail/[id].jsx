@@ -36,7 +36,6 @@ export default function raffleDetail() {
   useEffect(() => {
     async function fetchData() {
       const response = await getRaffleDetail(id);
-      console.log("🚀 ~ fetchData ~ response:", response);
       setData(response);
     }
     fetchData();
@@ -55,7 +54,6 @@ export default function raffleDetail() {
   const handleRunRaffle = async () => {
     setVisibleRunRaffle(true);
     const result = await getAssignedNumbers(id);
-    console.log("🚀 ~ handleRunRaffle ~ result:", result);
     setRaffleResult(result);
   };
 
