@@ -2,7 +2,8 @@ import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 
-const firebase_key = "AIzaSyC47rYcE77IeU9vIMva__-jA7cXRs5C0Uk";
+const firebase_key = process.env.EXPO_PUBLIC_FIREBASE_KEY;
+console.log("🚀 ~ firebase_key:", firebase_key);
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
