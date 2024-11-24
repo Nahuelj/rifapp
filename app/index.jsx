@@ -1,5 +1,11 @@
 import { InitScreen } from "../src/screens/InitScreen";
+import { StatusBar } from "expo-status-bar";
 
 export default function index() {
-  return <InitScreen />;
+  return (
+    <>
+      <StatusBar style="light" />
+      <InitScreen />
+    </>
+  );
 }

@@ -12,7 +12,7 @@ import default_img from "../../assets/app/icons/add_image.png";
 import { useAuth } from "../hooks/useAuth";
 import background from "../../assets/app/background.png";
 import { LargeYellowButton } from "../ui/Buttons";
-import { EmailText, NameText, NormalText } from "../ui/Texts";
+import { EmailText, NameText } from "../ui/Texts";
 import { getSessionLocalId } from "../utils/storage_functions";
 
 export function Account() {
@@ -70,7 +70,7 @@ export function Account() {
           <EmailText color={"black"} content={email} />
         </View>
 
-        <View style={{ marginTop: 30, gap: 30 }}>
+        <View style={{ marginTop: 30, gap: 25 }}>
           <LargeYellowButton
             onPressFunction={() => {
               console.log("función en desarrollo");

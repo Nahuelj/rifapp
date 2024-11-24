@@ -15,6 +15,7 @@ export function BasicInput({ placeholder, setState, state }) {
       }}
     >
       <TextInput
+        autoCapitalize="none"
         onChangeText={(text) => {
           setState(text);
         }}
@@ -105,6 +106,7 @@ export function PasswordInput({ placeholder, setState, state }) {
       }}
     >
       <TextInput
+        autoCapitalize="none"
         onChangeText={(text) => {
           setState(text);
         }}
