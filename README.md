@@ -2,9 +2,9 @@
 
 Riffap es una aplicación móvil diseñada para gestionar sorteos de manera eficiente y profesional. Actualmente, permite a un administrador cargar y gestionar la lista de participantes, realizar el sorteo de manera transparente y compartir los resultados con facilidad. Ideal para pequeños negocios, eventos o rifas personales, Riffap simplifica el proceso y asegura una experiencia confiable tanto para el organizador como para los participantes.
 
-|                   **Inicio**                   |                   **Registro**                   |                   **Home**                   |                   **Nuevo sorteo**                   |                   **Detalle de sorteo**                   |                   **Resultados de sorteo**                   |
-| :--------------------------------------------: | :----------------------------------------------: | :------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Inicio](https://i.postimg.cc/WpJWNybz/1.jpg) | ![Registro](https://i.postimg.cc/28Q0vBWf/3.jpg) | ![Home](https://i.postimg.cc/pLPqBXQ5/4.jpg) | ![Nuevo sorteo](https://i.postimg.cc/K8QQpSQq/5.jpg) | ![Detalle de sorteo](https://i.postimg.cc/PqxyB3Rt/6.jpg) | ![Resultados de sorteo](https://i.postimg.cc/nLP2Z4yq/7.jpg) |
+|                   **Inicio**                   |                   **Registro**                   |                   **Home**                   |                   **Nuevo**                   |                   **Detalle**                   |                   **Resultados**                   |
+| :--------------------------------------------: | :----------------------------------------------: | :------------------------------------------: | :-------------------------------------------: | :---------------------------------------------: | :------------------------------------------------: |
+| ![Inicio](https://i.postimg.cc/WpJWNybz/1.jpg) | ![Registro](https://i.postimg.cc/28Q0vBWf/3.jpg) | ![Home](https://i.postimg.cc/pLPqBXQ5/4.jpg) | ![Nuevo](https://i.postimg.cc/K8QQpSQq/5.jpg) | ![Detalle](https://i.postimg.cc/PqxyB3Rt/6.jpg) | ![Resultados](https://i.postimg.cc/nLP2Z4yq/7.jpg) |
 
 ## Tech Stack
 
