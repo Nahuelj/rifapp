@@ -90,31 +90,40 @@ export default function raffleDetail() {
           />
         </View>
 
-        {data.isActive ? (
-          <LargeYellowButton
-            onPressFunction={() => {
-              if (data.currentCapacity < parseInt(data.quantityWinners)) {
-                Alert.alert(
-                  "No se puede realizar el sorteo",
-                  `No es posible realizar el sorteo si no están asignados los números suficientes para la cantidad de ganadores establecidos.\n\nJugadores asignados: ${data.currentCapacity}\nJugadores requeridos como mínimo: ${data.quantityWinners}`,
-                  [{ text: "OK", onPress: () => "" }]
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            alignSelf: "center",
+            marginBottom: 10,
+          }}
+        >
+          {data.isActive ? (
+            <LargeYellowButton
+              onPressFunction={() => {
+                if (data.currentCapacity < parseInt(data.quantityWinners)) {
+                  Alert.alert(
+                    "No se puede realizar el sorteo",
+                    `No es posible realizar el sorteo si no están asignados los números suficientes para la cantidad de ganadores establecidos.\n\nJugadores asignados: ${data.currentCapacity}\nJugadores requeridos como mínimo: ${data.quantityWinners}`,
+                    [{ text: "OK", onPress: () => "" }]
+                  );
+                } else {
+                  handleRunRaffle();
+                }
+              }}
+              content={"Sortear"}
+            />
+          ) : (
+            <LargeYellowButton
+              onPressFunction={() => {
+                router.push(
+                  `/results/${id}?name=${data?.title}&&countWinner=${data?.quantityWinners}`
                 );
-              } else {
-                handleRunRaffle();
-              }
-            }}
-            content={"Sortear"}
-          />
-        ) : (
-          <LargeYellowButton
-            onPressFunction={() => {
-              router.push(
-                `/results/${id}?name=${data?.title}&&countWinner=${data?.quantityWinners}`
-              );
-            }}
-            content={"Ver resultados"}
-          />
-        )}
+              }}
+              content={"Ver resultados"}
+            />
+          )}
+        </View>
 
         <AsignedOwnerModal
           visibleState={visibleModal}
