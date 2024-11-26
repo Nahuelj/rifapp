@@ -10,8 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#9631c3",
-      "duration": 2000
+      "backgroundColor": "#9631c3"
     },
     "androidStatusBar": {
       "barStyle": "light-content"

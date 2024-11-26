@@ -34,7 +34,7 @@ export const InitScreen = () => {
     return (
       <SafeAreaView style={styles.loaderContainer}>
         {/* Muestra el loader mientras se obtiene la sesión */}
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#FFC600" />
       </SafeAreaView>
     );
   }
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#9631c3",
   },
   btn: {
     borderWidth: 2,
