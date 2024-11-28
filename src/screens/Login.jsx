@@ -35,24 +35,27 @@ export function Login() {
         <RifappLogo />
 
         <NormalText content={"Ingrese sus datos para iniciar sesión"} />
+        <View style={{ gap: 40, marginBottom: 30 }}>
+          <BasicInput
+            placeholder={"Correo electronico"}
+            setState={setEmail}
+            state={email}
+          />
 
-        <BasicInput
-          placeholder={"Correo electronico"}
-          setState={setEmail}
-          state={email}
-        />
+          <PasswordInput
+            placeholder={"Contraseña"}
+            setState={setPassword}
+            state={password}
+          />
+        </View>
 
-        <PasswordInput
-          placeholder={"Contraseña"}
-          setState={setPassword}
-          state={password}
-        />
-
-        <LargeYellowButtonWithDisabled
-          content={"iniciar sesión"}
-          onPressFunction={handleLogin}
-          disabled={validateComplete()}
-        />
+        <View style={{ marginBottom: 30 }}>
+          <LargeYellowButtonWithDisabled
+            content={"iniciar sesión"}
+            onPressFunction={handleLogin}
+            disabled={validateComplete()}
+          />
+        </View>
 
         <View
           style={{

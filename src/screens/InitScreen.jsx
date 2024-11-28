@@ -79,20 +79,8 @@ export const InitScreen = () => {
             content={"CREAR CUENTA"}
             onPressFunction={handleSignUp}
           />
-          <View style={{ marginBottom: 60 }}>
-            <NormalText content={`Problemas para ingresar ?`} />
-            <UnderlineText
-              onPressFunction={handleRecover}
-              content={"recuperar mi cuenta"}
-            />
-          </View>
 
-          <View style={{ marginBottom: 10 }}>
-            <UnderlineText
-              onPressFunction={handleTerms}
-              content={"terminos y condiciones"}
-            />
-          </View>
+          <View style={{ marginBottom: 10 }}></View>
         </SafeAreaView>
       </ImageBackground>
     </>

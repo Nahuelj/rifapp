@@ -1,4 +1,12 @@
-import { Image, View, ImageBackground, TouchableOpacity } from "react-native";
+import {
+  Image,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+  Modal,
+  Text,
+  StyleSheet,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { HeaderHome } from "../components/HeaderHome";
@@ -9,7 +17,8 @@ import background from "../../assets/app/background.png";
 import { LargeYellowButton } from "../ui/Buttons";
 import { EmailText, NameText } from "../ui/Texts";
 import { getSessionLocalId } from "../utils/storage_functions";
-import * as ImagePicker from "expo-image-picker"; // Importar ImagePicker
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system"; // Importamos FileSystem
 
 export function Account() {
   const { logout } = useAuth();
@@ -17,43 +26,107 @@ export function Account() {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState(default_img);
+  const [isModalVisible, setModalVisible] = useState(false);
 
+  // Cargar la imagen persistente al iniciar el componente
   useEffect(() => {
-    const fetchSession = async () => {
-      const sessionData = await getSessionLocalId();
-      console.log(
-        "🚀 ~ fetchSession ~ sessionData:--------------------------------------------------------------------",
-        sessionData
-      );
-      const { displayName, email, profilePhoto } = sessionData;
-
-      setDisplayName(displayName);
-      setEmail(email);
-
-      // Si existe una foto de perfil guardada, usarla
-      if (profilePhoto) {
-        setProfileImage({ uri: profilePhoto });
-      }
-    };
-
-    fetchSession();
+    loadPersistedImage();
+    fetchUserData();
   }, []);
 
-  const saveSession = async (data, profilePhoto = null) => {
+  // Cargar datos de usuario
+  const fetchUserData = async () => {
+    const sessionData = await getSessionLocalId();
+    const { displayName, email } = sessionData;
+
+    setDisplayName(displayName);
+    setEmail(email);
+  };
+
+  // Cargar imagen persistente
+  const loadPersistedImage = async () => {
     try {
-      // Crear una copia del objeto de datos para no modificar el original
-      const sessionData = { ...data };
-
-      // Si se proporciona una foto de perfil, agregarla al objeto de sesión
-      if (profilePhoto) {
-        sessionData.profilePhoto = profilePhoto;
+      const persistedImageUri = await AsyncStorage.getItem("userProfileImage");
+      if (persistedImageUri) {
+        // Verificar si el archivo existe antes de establecerlo
+        const fileInfo = await FileSystem.getInfoAsync(persistedImageUri);
+        if (fileInfo.exists) {
+          setProfileImage({ uri: persistedImageUri });
+        }
       }
-
-      await AsyncStorage.setItem("userSession", JSON.stringify(sessionData));
     } catch (error) {
-      console.error("Error saving session:", error);
-      throw error;
+      console.error("Error loading persisted image:", error);
     }
+  };
+
+  // Persistir imagen
+  const persistImage = async (imageUri) => {
+    try {
+      // Crear un nombre de archivo único
+      const fileName = `profile_${Date.now()}.jpg`;
+      const destPath = `${FileSystem.documentDirectory}${fileName}`;
+
+      // Copiar la imagen al directorio de documentos de la aplicación
+      await FileSystem.copyAsync({
+        from: imageUri,
+        to: destPath,
+      });
+
+      // Guardar la ruta de la imagen en AsyncStorage
+      await AsyncStorage.setItem("userProfileImage", destPath);
+
+      return destPath;
+    } catch (error) {
+      console.error("Error persisting image:", error);
+      return null;
+    }
+  };
+
+  const handleImageSelection = async (selectedImageUri) => {
+    try {
+      // Persistir la imagen
+      const persistedImagePath = await persistImage(selectedImageUri);
+
+      if (persistedImagePath) {
+        // Actualizar estado local de la imagen
+        setProfileImage({ uri: persistedImagePath });
+
+        // Opcional: Actualizar también la sesión
+        const sessionData = await getSessionLocalId();
+        await AsyncStorage.setItem(
+          "userSession",
+          JSON.stringify({
+            ...sessionData,
+            profilePhoto: persistedImagePath,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error handling image selection:", error);
+    }
+  };
+
+  // Resto del código de selección de imagen (takePicture, pickImage) se mantiene igual
+  const takePicture = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (status !== "granted") {
+      alert("Lo siento, necesitamos permisos para usar la cámara");
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled) {
+      const selectedImageUri = result.assets[0].uri;
+      await handleImageSelection(selectedImageUri);
+    }
+
+    setModalVisible(false);
   };
 
   const pickImage = async () => {
@@ -73,20 +146,10 @@ export function Account() {
 
     if (!result.canceled) {
       const selectedImageUri = result.assets[0].uri;
-
-      // Actualizar estado local de la imagen
-      setProfileImage({ uri: selectedImageUri });
-
-      // Obtener la sesión actual para guardarla con la nueva foto
-      try {
-        const sessionData = await getSessionLocalId();
-
-        // Guardar la sesión con la nueva foto de perfil
-        await saveSession(sessionData, selectedImageUri);
-      } catch (error) {
-        console.error("Error updating session with profile photo:", error);
-      }
+      await handleImageSelection(selectedImageUri);
     }
+
+    setModalVisible(false);
   };
 
   return (
@@ -117,9 +180,8 @@ export function Account() {
               marginBottom: 10,
             }}
           >
-            {/* Envolver la imagen con TouchableOpacity para hacerla presionable */}
             <TouchableOpacity
-              onPress={pickImage}
+              onPress={() => setModalVisible(true)}
               style={{
                 backgroundColor: "white",
                 height: profileImage === default_img ? 60 : 85,
@@ -150,49 +212,93 @@ export function Account() {
 
         <View style={{ marginTop: 30, gap: 25 }}>
           <LargeYellowButton
-            onPressFunction={() => {
-              console.log("función en desarrollo");
-            }}
-            content={"Cambiar nombre"}
-            backgroundColor={"white"}
-          />
-          <LargeYellowButton
-            onPressFunction={() => {
-              console.log("función en desarrollo");
-            }}
-            content={"Seguridad"}
-            backgroundColor={"white"}
-          />
-          <LargeYellowButton
-            onPressFunction={() => {
-              console.log("función en desarrollo");
-            }}
-            content={"Cambiar idioma"}
-            backgroundColor={"white"}
-          />
-          <LargeYellowButton
             onPressFunction={async () => {
               await logout();
             }}
             content={"Cerrar sesión"}
             backgroundColor={"white"}
           />
-          <LargeYellowButton
-            onPressFunction={() => {
-              console.log("función en desarrollo");
-            }}
-            content={"Eliminar cuenta"}
-            backgroundColor={"white"}
-          />
-          <LargeYellowButton
-            onPressFunction={() => {
-              console.log("función en desarrollo");
-            }}
-            content={"Terminos y condiciones"}
-            backgroundColor={"white"}
-          />
         </View>
+
+        {/* Modal for image selection */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitle}>Seleccionar Imagen</Text>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={takePicture}
+              >
+                <Text style={styles.modalButtonText}>Tomar Foto</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton} onPress={pickImage}>
+                <Text style={styles.modalButtonText}>Elegir de Galería</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "80%",
+  },
+  modalTitle: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  modalButton: {
+    backgroundColor: "#D7B4FF",
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    marginVertical: 10,
+    width: "100%",
+  },
+  modalButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  cancelButton: {
+    backgroundColor: "lightgray",
+  },
+  cancelButtonText: {
+    color: "black",
+    textAlign: "center",
+  },
+});

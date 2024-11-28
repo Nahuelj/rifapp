@@ -38,24 +38,28 @@ export function Signup() {
           content={"Complete los siguientes campos para registrarse"}
         />
 
-        <BasicInput placeholder={"Nombre"} setState={setName} state={name} />
-        <BasicInput
-          placeholder={"Correo electronico"}
-          setState={setEmail}
-          state={email}
-        />
+        <View style={{ gap: 40, marginBottom: 60 }}>
+          <BasicInput placeholder={"Nombre"} setState={setName} state={name} />
+          <BasicInput
+            placeholder={"Correo electronico"}
+            setState={setEmail}
+            state={email}
+          />
 
-        <PasswordInput
-          placeholder={"Contraseña"}
-          setState={setPassword}
-          state={password}
-        />
+          <PasswordInput
+            placeholder={"Contraseña"}
+            setState={setPassword}
+            state={password}
+          />
+        </View>
 
-        <LargeYellowButtonWithDisabled
-          content={"registrarme"}
-          onPressFunction={handleSignUp}
-          disabled={validateComplete()}
-        />
+        <View style={{ marginBottom: 55 }}>
+          <LargeYellowButtonWithDisabled
+            content={"registrarme"}
+            onPressFunction={handleSignUp}
+            disabled={validateComplete()}
+          />
+        </View>
 
         <View
           style={{
