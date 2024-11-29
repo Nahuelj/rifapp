@@ -10,13 +10,51 @@ export const useAuth = () => {
   const [error, setError] = useState(null);
 
   // Función para guardar sesión y navegar directamente
-  const saveSession = async (data) => {
+  const saveSession = async (idToken) => {
     try {
-      await AsyncStorage.setItem("userSession", JSON.stringify(data));
-      setIsAuthenticated(true);
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${firebase_key}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idToken: idToken,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response?.json();
+        throw new Error(errorData.error.message);
+      }
+
+      const dataUser = await response?.json();
+      console.log(
+        "🚀 ~ saveSession ~ dataUser:---------------------------------------------------------",
+        dataUser
+      );
+
+      // Incluir photoUrl en los datos de sesión
+      const sessionData = {
+        localId: dataUser?.users[0]?.localId,
+        email: dataUser?.users[0]?.email,
+        displayName: dataUser?.users[0]?.displayName,
+        photoUrl: dataUser?.users[0]?.photoUrl,
+        idToken: idToken,
+        // Otros campos necesarios
+      };
+
+      console.log(
+        "🚀 ~ saveSession ~ sessionData:---------------------------------------------------------",
+        sessionData
+      );
+
+      // Guardar en AsyncStorage
+      await AsyncStorage.setItem("userSession", JSON.stringify(sessionData));
     } catch (error) {
       console.error("Error saving session:", error);
-      throw error;
     }
   };
 
@@ -69,6 +107,7 @@ export const useAuth = () => {
 
       const data = await response.json();
 
+      // Usar el método correcto de Firebase para actualizar perfil
       const updateResponse = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${firebase_key}`,
         {
@@ -79,6 +118,7 @@ export const useAuth = () => {
           body: JSON.stringify({
             idToken: data.idToken,
             displayName,
+            photoUrl: "default", // Reemplaza con tu URL por defecto
             returnSecureToken: true,
           }),
         }
@@ -89,13 +129,12 @@ export const useAuth = () => {
         throw new Error(errorData.error.message);
       }
 
+      await updateResponse.json();
+
       await createUserInRealtime(data.localId, false);
 
-      // Usar la nueva función para guardar y navegar
-      await saveSession({
-        ...data,
-        displayName,
-      });
+      // Guardar sesión con información actualizada
+      await saveSession(data.idToken);
 
       return router.replace("/");
     } catch (error) {
@@ -128,7 +167,7 @@ export const useAuth = () => {
 
       const data = await response?.json();
       // Usar la nueva función para guardar y navegar
-      await saveSession(data);
+      await saveSession(data.idToken);
       router.replace("/home");
       return data;
     } catch (error) {

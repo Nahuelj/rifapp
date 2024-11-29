@@ -37,6 +37,7 @@ export function Account() {
   // Cargar datos de usuario
   const fetchUserData = async () => {
     const sessionData = await getSessionLocalId();
+    console.log("🚀 ~ fetchUserData ~ sessionData:", sessionData);
     const { displayName, email } = sessionData;
 
     setDisplayName(displayName);
