@@ -31,10 +31,6 @@ export const useAuth = () => {
       }
 
       const dataUser = await response?.json();
-      console.log(
-        "🚀 ~ saveSession ~ dataUser:---------------------------------------------------------",
-        dataUser
-      );
 
       // Incluir photoUrl en los datos de sesión
       const sessionData = {
@@ -45,11 +41,6 @@ export const useAuth = () => {
         idToken: idToken,
         // Otros campos necesarios
       };
-
-      console.log(
-        "🚀 ~ saveSession ~ sessionData:---------------------------------------------------------",
-        sessionData
-      );
 
       // Guardar en AsyncStorage
       await AsyncStorage.setItem("userSession", JSON.stringify(sessionData));
@@ -67,7 +58,10 @@ export const useAuth = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ raffles: raffleSetting }),
+          body: JSON.stringify({
+            raffles: raffleSetting,
+            profilePhoto: false,
+          }),
         }
       );
 

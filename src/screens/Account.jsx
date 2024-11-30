@@ -6,8 +6,8 @@ import {
   Modal,
   Text,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { HeaderHome } from "../components/HeaderHome";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,7 +18,24 @@ import { LargeYellowButton } from "../ui/Buttons";
 import { EmailText, NameText } from "../ui/Texts";
 import { getSessionLocalId } from "../utils/storage_functions";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system"; // Importamos FileSystem
+import * as FileSystem from "expo-file-system";
+import {
+  getUserProfilePhoto,
+  updateUserProfilePhoto,
+} from "../utils/user_functions";
+
+// Función para convertir imagen a base64
+const imageToBase64 = async (uri) => {
+  try {
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return base64;
+  } catch (error) {
+    console.error("Error convirtiendo imagen a base64:", error);
+    return null;
+  }
+};
 
 export function Account() {
   const { logout } = useAuth();
@@ -27,87 +44,68 @@ export function Account() {
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState(default_img);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Nuevo estado de carga
 
-  // Cargar la imagen persistente al iniciar el componente
+  // Cargar datos de usuario y foto de perfil al iniciar el componente
   useEffect(() => {
-    loadPersistedImage();
-    fetchUserData();
-  }, []);
+    const fetchUserDataAndPhoto = async () => {
+      try {
+        setIsLoading(true); // Iniciar carga
 
-  // Cargar datos de usuario
-  const fetchUserData = async () => {
-    const sessionData = await getSessionLocalId();
-    console.log("🚀 ~ fetchUserData ~ sessionData:", sessionData);
-    const { displayName, email } = sessionData;
+        // Obtener datos de sesión
+        const sessionData = await getSessionLocalId();
+        const { localId, displayName, email } = sessionData;
 
-    setDisplayName(displayName);
-    setEmail(email);
-  };
+        setUserId(localId);
+        setDisplayName(displayName);
+        setEmail(email);
 
-  // Cargar imagen persistente
-  const loadPersistedImage = async () => {
-    try {
-      const persistedImageUri = await AsyncStorage.getItem("userProfileImage");
-      if (persistedImageUri) {
-        // Verificar si el archivo existe antes de establecerlo
-        const fileInfo = await FileSystem.getInfoAsync(persistedImageUri);
-        if (fileInfo.exists) {
-          setProfileImage({ uri: persistedImageUri });
+        // Intentar obtener la foto de perfil desde Firebase
+        const firebaseProfilePhoto = await getUserProfilePhoto(localId);
+
+        if (firebaseProfilePhoto && firebaseProfilePhoto !== "default") {
+          // Si hay una foto en Firebase, establecerla
+          setProfileImage({
+            uri: `data:image/jpeg;base64,${firebaseProfilePhoto}`,
+          });
+        } else {
+          // Si no hay foto, usar imagen por defecto
+          setProfileImage(default_img);
         }
+      } catch (error) {
+        console.error("Error al cargar datos de usuario:", error);
+        setProfileImage(default_img);
+      } finally {
+        setIsLoading(false); // Finalizar carga
       }
-    } catch (error) {
-      console.error("Error loading persisted image:", error);
-    }
-  };
+    };
 
-  // Persistir imagen
-  const persistImage = async (imageUri) => {
-    try {
-      // Crear un nombre de archivo único
-      const fileName = `profile_${Date.now()}.jpg`;
-      const destPath = `${FileSystem.documentDirectory}${fileName}`;
-
-      // Copiar la imagen al directorio de documentos de la aplicación
-      await FileSystem.copyAsync({
-        from: imageUri,
-        to: destPath,
-      });
-
-      // Guardar la ruta de la imagen en AsyncStorage
-      await AsyncStorage.setItem("userProfileImage", destPath);
-
-      return destPath;
-    } catch (error) {
-      console.error("Error persisting image:", error);
-      return null;
-    }
-  };
+    fetchUserDataAndPhoto();
+  }, []);
 
   const handleImageSelection = async (selectedImageUri) => {
     try {
-      // Persistir la imagen
-      const persistedImagePath = await persistImage(selectedImageUri);
+      // Convertir imagen a base64
+      const base64Image = await imageToBase64(selectedImageUri);
 
-      if (persistedImagePath) {
-        // Actualizar estado local de la imagen
-        setProfileImage({ uri: persistedImagePath });
+      if (base64Image && userId) {
+        // Actualizar foto en Firebase
+        const updateResult = await updateUserProfilePhoto(userId, base64Image);
 
-        // Opcional: Actualizar también la sesión
-        const sessionData = await getSessionLocalId();
-        await AsyncStorage.setItem(
-          "userSession",
-          JSON.stringify({
-            ...sessionData,
-            profilePhoto: persistedImagePath,
-          })
-        );
+        if (updateResult) {
+          // Actualizar estado local de la imagen
+          setProfileImage({ uri: `data:image/jpeg;base64,${base64Image}` });
+        } else {
+          console.error("No se pudo actualizar la foto de perfil");
+        }
       }
     } catch (error) {
-      console.error("Error handling image selection:", error);
+      console.error("Error manejando selección de imagen:", error);
     }
   };
 
-  // Resto del código de selección de imagen (takePicture, pickImage) se mantiene igual
+  // El resto del código de takePicture y pickImage se mantiene igual
   const takePicture = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
@@ -153,6 +151,9 @@ export function Account() {
     setModalVisible(false);
   };
 
+  // El resto del componente se mantiene igual
+  // ...
+
   return (
     <ImageBackground source={background} style={{ flex: 1 }}>
       <SafeAreaView>
@@ -170,45 +171,72 @@ export function Account() {
             height: 210,
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              height: 85,
-              width: 85,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 100,
-              marginBottom: 10,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => setModalVisible(true)}
+          {isLoading ? (
+            // Mostrar spinner de carga
+            <View
               style={{
-                backgroundColor: "white",
-                height: profileImage === default_img ? 60 : 85,
-                width: profileImage === default_img ? 60 : 85,
+                flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: 100,
+                width: "100%",
+                height: "100%",
               }}
             >
-              <Image
-                source={profileImage}
+              <ActivityIndicator size="large" color="white" />
+              <Text
                 style={{
-                  width: profileImage === default_img ? 60 : 85,
-                  height: profileImage === default_img ? 60 : 85,
-                  borderRadius: profileImage === default_img ? 0 : 100,
+                  color: "white",
+                  marginTop: 10,
+                  fontSize: 16,
                 }}
-                resizeMode="cover"
+              >
+                Cargando perfil...
+              </Text>
+            </View>
+          ) : (
+            // Contenido normal cuando no está cargando
+            <>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  height: 85,
+                  width: 85,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 100,
+                  marginBottom: 10,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => setModalVisible(true)}
+                  style={{
+                    backgroundColor: "white",
+                    height: profileImage === default_img ? 60 : 85,
+                    width: profileImage === default_img ? 60 : 85,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 100,
+                  }}
+                >
+                  <Image
+                    source={profileImage}
+                    style={{
+                      width: profileImage === default_img ? 60 : 85,
+                      height: profileImage === default_img ? 60 : 85,
+                      borderRadius: profileImage === default_img ? 0 : 100,
+                    }}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              </View>
+              <NameText
+                formatText={"capitalize"}
+                color={"white"}
+                content={displayName}
               />
-            </TouchableOpacity>
-          </View>
-          <NameText
-            formatText={"capitalize"}
-            color={"white"}
-            content={displayName}
-          />
-          <EmailText color={"black"} content={email} />
+              <EmailText color={"black"} content={email} />
+            </>
+          )}
         </View>
 
         <View style={{ marginTop: 30, gap: 25 }}>
