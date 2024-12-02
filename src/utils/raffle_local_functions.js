@@ -208,3 +208,67 @@ export function runRaffle(soldNumbers, winnersCount) {
 
   return winners;
 }
+
+// Función para cambiar estado del sorteo a pasado
+export async function updateRaffleRealized(raffleId, winners) {
+  try {
+    // Obtener los sorteos guardados localmente
+    const rafflesJson = await AsyncStorage.getItem("raffles");
+    const raffles = rafflesJson ? JSON.parse(rafflesJson) : {};
+
+    // Encontrar el sorteo específico por su ID
+    const raffleIndex = Object.keys(raffles).find(
+      (key) => raffles[key].id === raffleId
+    );
+
+    if (!raffleIndex) {
+      throw new Error("Raffle not found");
+    }
+
+    const raffleData = raffles[raffleIndex];
+
+    // Preparar los datos actualizados del sorteo
+    const updatedRaffleData = {
+      ...raffleData,
+      winners,
+      isActive: false,
+    };
+
+    // Actualizar el sorteo en los datos locales
+    raffles[raffleIndex] = updatedRaffleData;
+
+    // Guardar los datos actualizados en AsyncStorage
+    await AsyncStorage.setItem("raffles", JSON.stringify(raffles));
+
+    return updatedRaffleData;
+  } catch (error) {
+    console.error("Error al actualizar el número del sorteo:", error);
+    throw error;
+  }
+}
+
+// Función para obtener los ganadores de un sorteo
+export async function getRaffleWinners(raffleId) {
+  try {
+    // Obtener los sorteos guardados localmente
+    const rafflesJson = await AsyncStorage.getItem("raffles");
+    const raffles = rafflesJson ? JSON.parse(rafflesJson) : {};
+
+    // Encontrar el sorteo específico por su ID
+    const raffleKey = Object.keys(raffles).find(
+      (key) => raffles[key].id === raffleId
+    );
+
+    if (!raffleKey || !raffles[raffleKey]?.winners) {
+      throw new Error("No se encontraron ganadores en el sorteo.");
+    }
+
+    // Obtener los ganadores del sorteo
+    const winners = raffles[raffleKey].winners;
+
+    return winners;
+  } catch (error) {
+    console.error("Error al obtener los ganadores del sorteo:", error);
+    throw error;
+  }
+}

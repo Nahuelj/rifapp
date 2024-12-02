@@ -8,7 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { CheckBox } from "@rneui/themed";
-import { updateRaffleRealized } from "../utils/raffle_functions";
+import { updateRaffleRealized } from "../utils/raffle_local_functions";
 import { NormalText } from "../ui/Texts";
 import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 import background from "../../assets/app/background_modal.png";
@@ -23,7 +23,7 @@ export function RunRaffleModal({
   const [check, setCheck] = useState(false);
 
   const handleRaffleRealized = async () => {
-    const response = await updateRaffleRealized(raffleId, raffleResult);
+    await updateRaffleRealized(raffleId, raffleResult);
     onUpdateComplete();
   };
 

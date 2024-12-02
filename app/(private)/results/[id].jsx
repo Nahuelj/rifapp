@@ -2,7 +2,7 @@ import { View, Text, FlatList, ImageBackground } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getRaffleWinners } from "../../../src/utils/raffle_functions";
+import { getRaffleWinners } from "../../../src/utils/raffle_local_functions";
 import background from "../../../assets/app/background.png";
 import { StatusBar } from "expo-status-bar";
 import { BackHeaderRaffle } from "../../../src/ui/BackHeader";

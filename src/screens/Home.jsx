@@ -18,7 +18,6 @@ import { getRaffles } from "../utils/raffle_local_functions";
 export function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  console.log("🚀 ~ Home ~ data:", data);
 
   useFocusEffect(
     useCallback(() => {

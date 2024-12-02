@@ -7,7 +7,7 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AsignedOwnerModal } from "../../../src/components/AsignedOwnerModal";
@@ -15,10 +15,10 @@ import { RunRaffleModal } from "../../../src/components/RunRaffleModal";
 import {
   getRaffleDetail,
   removeTicket,
-  saveRaffleNumber,
-} from "../../../src/utils/raffle_functions";
-import { updateRaffleNumber } from "../../../src/utils/raffle_functions";
-import { getAssignedNumbers } from "../../../src/utils/raffle_functions";
+  editRaffleNumber,
+  updateRaffleNumber,
+  getAssignedNumbers,
+} from "../../../src/utils/raffle_local_functions";
 import { BackHeaderRaffle } from "../../../src/ui/BackHeader";
 import background from "../../../assets/app/background.png";
 import { StatusBar } from "expo-status-bar";
@@ -133,7 +133,7 @@ export default function raffleDetail() {
           raffleId={id}
           isAsigned={ticketSelected?.isAsigned}
           onPressFunction={updateRaffleNumber}
-          onSaveFunction={saveRaffleNumber}
+          onSaveFunction={editRaffleNumber}
           onRemoveFuntion={removeTicket}
           onUpdateComplete={handleUpdateComplete} // Para volver a renderizar el componente
           ticketPropietary={ticketSelected?.propietary}
