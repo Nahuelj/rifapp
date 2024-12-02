@@ -9,51 +9,14 @@ import background from "../../assets/app/background.png";
 import { HeaderHome } from "../components/HeaderHome";
 import { RaffleCard } from "../components/RaffleCard";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
-import { getRafflesByUserId } from "../utils/raffle_functions";
-import { useFocusEffect } from "expo-router";
-import { useCallback } from "react";
-import { getSessionLocalId } from "../utils/storage_functions";
+import { useState } from "react";
 import { NewRaffleButton } from "../ui/Buttons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 export function Home() {
-  const [session, setSession] = useState(null);
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      const sessionData = await getSessionLocalId();
-      setSession(sessionData);
-    };
-
-    fetchSession();
-  }, []);
-
-  async function fetch() {
-    setIsLoading(true);
-    try {
-      if (session?.localId) {
-        const response = await getRafflesByUserId(session.localId);
-        setData(response);
-      }
-    } catch (error) {
-      console.error("Error fetching raffles:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useFocusEffect(
-    useCallback(() => {
-      if (session) {
-        fetch();
-      }
-      return () => {};
-    }, [session])
-  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNewRaffle = () => {
     return router.push("/newRaffle");

@@ -60,30 +60,7 @@ export function HeaderHome() {
               !home && { opacity: 0.6 },
             ]}
           >
-            MIS SORTEOS
-          </Text>
-        </TouchableOpacity>
-      </Link>
-      <Link asChild href="/account">
-        <TouchableOpacity style={{ flex: 1 }}>
-          <Text
-            style={[
-              {
-                fontFamily: "Poppins-SemiBold",
-                paddingHorizontal: 10,
-                backgroundColor: "#FFC600",
-                textAlign: "center",
-                fontSize: 18,
-                flex: 1,
-                textAlignVertical: "center",
-                borderRadius: 5,
-                lineHeight: 46,
-                color: "#49108B",
-              },
-              !account && { opacity: 0.6 },
-            ]}
-          >
-            MI CUENTA
+            🎁 MIS SORTEOS 💖
           </Text>
         </TouchableOpacity>
       </Link>

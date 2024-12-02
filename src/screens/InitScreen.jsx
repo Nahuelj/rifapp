@@ -1,60 +1,15 @@
-import {
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  ImageBackground,
-  Linking,
-} from "react-native";
+import { StyleSheet, View, ImageBackground } from "react-native";
 import background from "../../assets/app/background.png";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
-import { getSessionLocalId } from "../utils/storage_functions";
-import { NormalText, UnderlineText, HeaderText } from "../ui/Texts";
+import { NormalText, HeaderText } from "../ui/Texts";
 import { LargeYellowButton } from "../ui/Buttons";
 import { StatusBar } from "expo-status-bar";
 import { RifappLogo } from "../ui/RifappLogo";
 
 export const InitScreen = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function getSession() {
-      const localId = await getSessionLocalId();
-      if (localId) {
-        // Si existe la sesión, redirigir a Home
-        return router.replace("/home");
-      }
-      setIsLoading(false); // Detener el loader si no hay sesión
-    }
-    getSession();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.loaderContainer}>
-        {/* Muestra el loader mientras se obtiene la sesión */}
-        <ActivityIndicator size="large" color="#FFC600" />
-      </SafeAreaView>
-    );
-  }
-
-  const handleLogin = () => {
-    router.push("/login");
-  };
-
-  const handleSignUp = () => {
-    router.push("/signup");
-  };
-
-  const handleRecover = () => {
-    router.push("/recover");
-  };
-
-  const handleTerms = () => {
-    Linking.openURL("https://www.tu-sitio-web.com").catch((err) =>
-      console.error("Error al abrir el sitio web:", err)
-    );
+  const handleStart = () => {
+    router.push("/home");
   };
 
   return (
@@ -70,14 +25,15 @@ export const InitScreen = () => {
           <NormalText
             content={"Gestiona tus sorteos de forma comoda y segura"}
           />
-          <LargeYellowButton
-            content={"INICIAR SESIÓN"}
-            onPressFunction={handleLogin}
+          <NormalText
+            content={
+              "Aqui podras crear tus sorteos personalizados, anotar quienes participan con su numero elegido y realizar un sorteo de forma sencilla y transparente."
+            }
           />
-          <NormalText content={"Aun no tienes una cuenta ?"} />
+          <NormalText content={"¡Crea, anotá y sortea!"} />
           <LargeYellowButton
-            content={"CREAR CUENTA"}
-            onPressFunction={handleSignUp}
+            content={"COMENZAR"}
+            onPressFunction={handleStart}
           />
 
           <View style={{ marginBottom: 10 }}></View>
