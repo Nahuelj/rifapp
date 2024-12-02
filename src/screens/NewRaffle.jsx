@@ -1,9 +1,7 @@
 import { View, Alert, ImageBackground } from "react-native";
-import React, { useState, useEffect } from "react";
-import { Link, useRouter } from "expo-router";
-import { addNewRaffle } from "../utils/raffle_functions";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
 import { LargeText, NormalText } from "../ui/Texts";
-import { getSessionLocalId } from "../utils/storage_functions"; // Asegúrate de que esta importación esté presente
 import { SafeAreaView } from "react-native-safe-area-context";
 import background from "../../assets/app/background.png";
 import { BasicInput, NumericInput } from "../ui/Inputs";
@@ -14,7 +12,6 @@ export function NewRaffle() {
   const [raffleName, setRaffleName] = useState("");
   const [maxCapacity, setMaxCapacity] = useState("");
   const [quantityWinners, setQuantityWinners] = useState("");
-  const [session, setSession] = useState(null);
 
   const validateRaffleConfiguration = (participants, totalWinners) => {
     const MAX_PARTICIPANTS = 500;
@@ -46,15 +43,6 @@ export function NewRaffle() {
     return true;
   };
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      const sessionData = await getSessionLocalId();
-      setSession(sessionData);
-    };
-
-    fetchSession(); // Obtener sesión cuando el componente se monte
-  }, []);
-
   // Verifica si la sesión está disponible antes de permitir la creación del sorteo
   const handleCreateRaffle = async () => {
     const result = validateRaffleConfiguration(maxCapacity, quantityWinners);
@@ -63,17 +51,8 @@ export function NewRaffle() {
       return null;
     }
 
-    if (!session?.localId) {
-      console.error("No se encontró sesión, no se puede crear el sorteo.");
-      return;
-    }
+    // add new raffle
 
-    await addNewRaffle(
-      session.localId, // Usar session.localId en lugar de session?.localId
-      raffleName,
-      maxCapacity,
-      quantityWinners
-    );
     router.push("/home");
   };
 

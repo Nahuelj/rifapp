@@ -4,7 +4,6 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NormalText, HeaderText } from "../ui/Texts";
 import { LargeYellowButton } from "../ui/Buttons";
-import { StatusBar } from "expo-status-bar";
 import { RifappLogo } from "../ui/RifappLogo";
 
 export const InitScreen = () => {
@@ -14,7 +13,6 @@ export const InitScreen = () => {
 
   return (
     <>
-      <StatusBar style="light" />
       <ImageBackground source={background}>
         <SafeAreaView style={styles.cont}>
           <View style={{ marginTop: 10 }}>
