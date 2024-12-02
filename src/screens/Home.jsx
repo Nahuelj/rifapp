@@ -9,14 +9,28 @@ import background from "../../assets/app/background.png";
 import { HeaderHome } from "../components/HeaderHome";
 import { RaffleCard } from "../components/RaffleCard";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { NewRaffleButton } from "../ui/Buttons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { getRaffles } from "../utils/raffle_local_functions";
 
 export function Home() {
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  console.log("🚀 ~ Home ~ data:", data);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function fetch() {
+        const raffles = await getRaffles();
+        setData(raffles);
+        setIsLoading(false);
+      }
+      fetch();
+      // Función que se ejecuta cuando la pantalla gana el foco
+    }, [])
+  );
 
   const handleNewRaffle = () => {
     return router.push("/newRaffle");

@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import background from "../../assets/app/background.png";
 import { BasicInput, NumericInput } from "../ui/Inputs";
 import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
+import { addNewRaffle } from "../utils/raffle_local_functions";
 
 export function NewRaffle() {
   const router = useRouter();
@@ -52,8 +53,9 @@ export function NewRaffle() {
     }
 
     // add new raffle
+    await addNewRaffle(raffleName, maxCapacity, quantityWinners);
 
-    router.push("/home");
+    router.back();
   };
 
   const handleBack = () => {

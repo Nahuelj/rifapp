@@ -1,5 +1,4 @@
 import uuid from "react-native-uuid";
-import { getSessionLocalId } from "./storage_functions";
 
 export async function addNewRaffle(
   userId,
@@ -67,29 +66,29 @@ export async function addNewRaffle(
   }
 }
 
-export async function getRafflesByUserId(userId) {
-  try {
-    const response = await fetch(
-      `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles.json`
-    );
+// export async function getRafflesByUserId(userId) {
+//   try {
+//     const response = await fetch(
+//       `https://rifapp-63ea8-default-rtdb.firebaseio.com/users/${userId}/raffles.json`
+//     );
 
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response?.status}`);
-    }
+//     if (!response.ok) {
+//       throw new Error(`Error HTTP: ${response?.status}`);
+//     }
 
-    const raffles = await response.json();
+//     const raffles = await response.json();
 
-    // Si no hay sorteos, retornamos un array vacío
-    if (!raffles) {
-      return [];
-    }
+//     // Si no hay sorteos, retornamos un array vacío
+//     if (!raffles) {
+//       return [];
+//     }
 
-    return raffles;
-  } catch (error) {
-    console.error("Error al obtener los sorteos:", error);
-    throw error; // Re-lanzamos el error para manejarlo en el componente
-  }
-}
+//     return raffles;
+//   } catch (error) {
+//     console.error("Error al obtener los sorteos:", error);
+//     throw error; // Re-lanzamos el error para manejarlo en el componente
+//   }
+// }
 
 export async function getRaffleDetail(raffleId) {
   const userSession = await getSessionLocalId();
