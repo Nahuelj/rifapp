@@ -28,8 +28,10 @@ export async function addNewRaffle(title, maxCapacity, quantityWinners) {
       quantityWinners,
     };
 
-    // Guardar el sorteo actualizado
-    const updatedRaffles = [...existingRaffles, newRaffle];
+    // Agregar el nuevo sorteo al inicio de la lista
+    const updatedRaffles = [newRaffle, ...existingRaffles];
+
+    // Guardar los sorteos actualizados
     await AsyncStorage.setItem("raffles", JSON.stringify(updatedRaffles));
 
     console.log("Sorteo agregado exitosamente");
@@ -214,14 +216,12 @@ export async function updateRaffleRealized(raffleId, winners) {
   try {
     // Obtener los sorteos guardados localmente
     const rafflesJson = await AsyncStorage.getItem("raffles");
-    const raffles = rafflesJson ? JSON.parse(rafflesJson) : {};
+    const raffles = rafflesJson ? JSON.parse(rafflesJson) : [];
 
     // Encontrar el sorteo específico por su ID
-    const raffleIndex = Object.keys(raffles).find(
-      (key) => raffles[key].id === raffleId
-    );
+    const raffleIndex = raffles.findIndex((raffle) => raffle.id === raffleId);
 
-    if (!raffleIndex) {
+    if (raffleIndex === -1) {
       throw new Error("Raffle not found");
     }
 
@@ -237,8 +237,11 @@ export async function updateRaffleRealized(raffleId, winners) {
     // Actualizar el sorteo en los datos locales
     raffles[raffleIndex] = updatedRaffleData;
 
+    // Ordenar: Activos primero, no activos al final
+    const sortedRaffles = raffles.sort((a, b) => b.isActive - a.isActive);
+
     // Guardar los datos actualizados en AsyncStorage
-    await AsyncStorage.setItem("raffles", JSON.stringify(raffles));
+    await AsyncStorage.setItem("raffles", JSON.stringify(sortedRaffles));
 
     return updatedRaffleData;
   } catch (error) {

@@ -116,9 +116,14 @@ export default function raffleDetail() {
           ) : (
             <LargeYellowButton
               onPressFunction={() => {
-                router.push(
-                  `/results/${id}?name=${data?.title}&&countWinner=${data?.quantityWinners}`
-                );
+                router.push({
+                  pathname: `/results/${id}`,
+                  params: {
+                    confeti: true,
+                    name: data?.title,
+                    countWinner: data?.quantityWinners,
+                  },
+                });
               }}
               content={"Ver resultados"}
             />
@@ -147,6 +152,9 @@ export default function raffleDetail() {
           raffleId={id}
           raffleResult={raffleResult}
           onUpdateComplete={handleRaffleComplete} // Para volver a renderizar el componente
+          id={id}
+          name={data?.title}
+          countWinner={data?.quantityWinners}
         />
       </SafeAreaView>
     </ImageBackground>

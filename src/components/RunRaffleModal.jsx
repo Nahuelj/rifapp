@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
+import { View, Modal, StyleSheet, ImageBackground } from "react-native";
 import { CheckBox } from "@rneui/themed";
 import { updateRaffleRealized } from "../utils/raffle_local_functions";
 import { NormalText } from "../ui/Texts";
 import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 import background from "../../assets/app/background_modal.png";
+import { router } from "expo-router";
 
 export function RunRaffleModal({
   visibleState,
@@ -19,12 +13,20 @@ export function RunRaffleModal({
   raffleResult,
   raffleId,
   onUpdateComplete,
+  id,
+  name,
+  countWinner,
 }) {
   const [check, setCheck] = useState(false);
 
   const handleRaffleRealized = async () => {
     await updateRaffleRealized(raffleId, raffleResult);
-    onUpdateComplete();
+    await onUpdateComplete();
+
+    router.push({
+      pathname: `/results/${id}`,
+      params: { confeti: true, name: name, countWinner: countWinner },
+    });
   };
 
   return (

@@ -55,7 +55,8 @@ export function NewRaffle() {
     // add new raffle
     await addNewRaffle(raffleName, maxCapacity, quantityWinners);
 
-    router.back();
+    // Redirigir y pasar un parámetro
+    router.push({ pathname: "/home", params: { scrollToTop: true } });
   };
 
   const handleBack = () => {

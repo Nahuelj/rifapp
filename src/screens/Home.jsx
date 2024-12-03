@@ -9,13 +9,15 @@ import background from "../../assets/app/background.png";
 import { HeaderHome } from "../components/HeaderHome";
 import { RaffleCard } from "../components/RaffleCard";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { NewRaffleButton } from "../ui/Buttons";
-import { router, useFocusEffect } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { getRaffles } from "../utils/raffle_local_functions";
 
 export function Home() {
+  const flatListRef = useRef(null); // Referencia al FlatList
+  const { scrollToTop } = useLocalSearchParams(); // Leer parámetros de la URL
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,6 +32,13 @@ export function Home() {
       // Función que se ejecuta cuando la pantalla gana el foco
     }, [])
   );
+
+  // Desplazar al inicio si el parámetro `scrollToTop` está presente
+  useEffect(() => {
+    if (scrollToTop && flatListRef.current) {
+      flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [scrollToTop]);
 
   const handleNewRaffle = () => {
     return router.push("/newRaffle");
@@ -91,6 +100,7 @@ export function Home() {
     return (
       <View style={{ height: 685 }}>
         <FlatList
+          ref={flatListRef} // Asignar la referencia
           data={data}
           renderItem={renderRaffleCard}
           initialNumToRender={20}

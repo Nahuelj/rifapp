@@ -1,5 +1,12 @@
-import { View, Text, FlatList, ImageBackground } from "react-native";
 import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ImageBackground,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getRaffleWinners } from "../../../src/utils/raffle_local_functions";
@@ -7,70 +14,85 @@ import background from "../../../assets/app/background.png";
 import { StatusBar } from "expo-status-bar";
 import { BackHeaderRaffle } from "../../../src/ui/BackHeader";
 import { LargeText, NormalText } from "../../../src/ui/Texts";
+import ConfettiCannon from "react-native-confetti-cannon";
 
-export default function results() {
-  const { id, name, countWinner } = useLocalSearchParams();
+const { width, height } = Dimensions.get("window");
+
+export default function Results() {
+  const { id, name, countWinner, confeti } = useLocalSearchParams();
   const [winners, setWinners] = useState([]);
+  const [isLoadingWinners, setIsLoadingWinners] = useState(true);
+  console.log("🚀 ~ Results ~ confeti:", confeti);
+  console.log("🚀 ~ Results ~ isLoadingWinners:", isLoadingWinners);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getRaffleWinners(id);
-      setWinners(result);
+      try {
+        const result = await getRaffleWinners(id);
+        setWinners(result);
+      } catch (error) {
+        console.error("Error fetching winners:", error);
+      }
+    }
+
+    if (!confeti) {
+      setIsLoadingWinners(false);
+      console.log("es falso");
     }
     fetchData();
-  }, []);
+  }, [id]);
 
-  const RenderWinnerCard = ({ item }) => {
-    return (
-      <>
-        <View
+  const RenderWinnerCard = ({ item }) => (
+    <>
+      <View
+        style={{
+          backgroundColor: "#AD62CD",
+          alignSelf: "flex-start",
+          marginLeft: 10,
+          marginBottom: 10,
+          paddingHorizontal: 10,
+          borderRadius: 5,
+          paddingVertical: 1,
+        }}
+      >
+        <NormalText content={`Puesto ${item.position}`} />
+      </View>
+      <View
+        style={{
+          width: 360,
+          backgroundColor: "white",
+          alignSelf: "center",
+          height: 70,
+          borderRadius: 5,
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
+        <Text
           style={{
-            backgroundColor: "#AD62CD",
-            alignSelf: "flex-start",
-            marginLeft: 10,
-            marginBottom: 10,
-            paddingHorizontal: 10,
-            borderRadius: 5,
-            paddingVertical: 1,
-          }}
-        >
-          <NormalText content={`Puesto ${item.position}`} />
-        </View>
-        <View
-          style={{
-            width: 360,
-            backgroundColor: "white",
-            alignSelf: "center",
-            height: 70,
-            borderRadius: 5,
-            flexDirection: "row",
+            height: 50,
+            width: 50,
+            backgroundColor: "#CEA3FF",
+            justifyContent: "center",
             alignItems: "center",
-            gap: 20,
+            textAlign: "center",
+            textAlignVertical: "center",
+            borderRadius: 5,
+            fontSize: 25,
+            marginLeft: 10,
           }}
         >
-          <Text
-            style={{
-              height: 50,
-              width: 50,
-              backgroundColor: "#CEA3FF",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
-              textAlignVertical: "center",
-              borderRadius: 5,
-              fontSize: 25,
-              marginLeft: 10,
-            }}
-          >{`${item.number}`}</Text>
-          <NormalText
-            formatText={"capitalize"}
-            color={"black"}
-            content={item.owner}
-          />
-        </View>
-      </>
-    );
-  };
+          {`${item.number}`}
+        </Text>
+        <NormalText
+          formatText={"capitalize"}
+          color={"black"}
+          content={item.owner}
+        />
+      </View>
+    </>
+  );
 
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
@@ -85,21 +107,45 @@ export default function results() {
           />
         </View>
 
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={winners}
-            renderItem={RenderWinnerCard}
-            initialNumToRender={20}
-            windowSize={5} // Ajusta este valor según tu necesidad
-            keyExtractor={(item) => item?.number}
-            contentContainerStyle={{
-              padding: 16,
-              gap: 30, // Funciona en versiones más recientes de React Native
-              paddingBottom: 100,
-            }}
-          />
-        </View>
+        {isLoadingWinners ? (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <ActivityIndicator size="large" color="#AD62CD" />
+          </View>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={winners}
+              renderItem={RenderWinnerCard}
+              initialNumToRender={20}
+              windowSize={5}
+              keyExtractor={(item) => item?.number}
+              contentContainerStyle={{
+                padding: 16,
+                gap: 30,
+                paddingBottom: 100,
+              }}
+            />
+          </View>
+        )}
       </SafeAreaView>
+
+      {confeti && (
+        <ConfettiCannon
+          onAnimationStart={() => {
+            setTimeout(() => {
+              setIsLoadingWinners(false);
+            }, 350);
+          }}
+          count={100}
+          fallSpeed={5500}
+          origin={{
+            x: width / 2,
+            y: -height - 50,
+          }}
+        />
+      )}
     </ImageBackground>
   );
 }
