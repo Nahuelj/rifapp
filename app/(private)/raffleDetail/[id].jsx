@@ -21,7 +21,6 @@ import {
 } from "../../../src/utils/raffle_local_functions";
 import { BackHeaderRaffle } from "../../../src/ui/BackHeader";
 import background from "../../../assets/app/background.png";
-import { StatusBar } from "expo-status-bar";
 import { LargeYellowButton } from "../../../src/ui/Buttons";
 
 export default function raffleDetail() {
@@ -73,7 +72,6 @@ export default function raffleDetail() {
 
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
-      <StatusBar style="light" />
       <SafeAreaView style={styles.container}>
         <BackHeaderRaffle raffleTitle={data.title} />
 
@@ -119,7 +117,7 @@ export default function raffleDetail() {
                 router.push({
                   pathname: `/results/${id}`,
                   params: {
-                    confeti: true,
+                    confeti: false,
                     name: data?.title,
                     countWinner: data?.quantityWinners,
                   },

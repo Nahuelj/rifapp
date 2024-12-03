@@ -12,7 +12,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { NewRaffleButton } from "../ui/Buttons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { getRaffles } from "../utils/raffle_local_functions";
 
 export function Home() {
@@ -117,7 +116,6 @@ export function Home() {
 
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
-      <StatusBar style="light" />
       <SafeAreaView style={{ flex: 1, position: "relative" }}>
         <View>
           <HeaderHome />

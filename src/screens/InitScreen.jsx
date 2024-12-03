@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NormalText, HeaderText } from "../ui/Texts";
 import { LargeYellowButton } from "../ui/Buttons";
 import { RifappLogo } from "../ui/RifappLogo";
+import { StatusBar } from "expo-status-bar";
 
 export const InitScreen = () => {
   const handleStart = () => {
@@ -12,7 +13,7 @@ export const InitScreen = () => {
   };
 
   return (
-    <>
+    <View>
       <ImageBackground source={background}>
         <SafeAreaView style={styles.cont}>
           <View style={{ marginTop: 10 }}>
@@ -37,7 +38,8 @@ export const InitScreen = () => {
           <View style={{ marginBottom: 10 }}></View>
         </SafeAreaView>
       </ImageBackground>
-    </>
+      <StatusBar style="light" backgroundColor="#AD62CD" translucent={false} />
+    </View>
   );
 };
 

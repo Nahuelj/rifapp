@@ -11,7 +11,6 @@ import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getRaffleWinners } from "../../../src/utils/raffle_local_functions";
 import background from "../../../assets/app/background.png";
-import { StatusBar } from "expo-status-bar";
 import { BackHeaderRaffle } from "../../../src/ui/BackHeader";
 import { LargeText, NormalText } from "../../../src/ui/Texts";
 import ConfettiCannon from "react-native-confetti-cannon";
@@ -30,15 +29,13 @@ export default function Results() {
       try {
         const result = await getRaffleWinners(id);
         setWinners(result);
+        setIsLoadingWinners(false);
       } catch (error) {
         console.error("Error fetching winners:", error);
+        setIsLoadingWinners(false);
       }
     }
 
-    if (!confeti) {
-      setIsLoadingWinners(false);
-      console.log("es falso");
-    }
     fetchData();
   }, [id]);
 
@@ -96,7 +93,6 @@ export default function Results() {
 
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
-      <StatusBar style="light" />
       <SafeAreaView style={{ flex: 1 }}>
         <BackHeaderRaffle raffleTitle={name} />
 
@@ -131,7 +127,7 @@ export default function Results() {
         )}
       </SafeAreaView>
 
-      {confeti && (
+      {confeti === "true" && (
         <ConfettiCannon
           onAnimationStart={() => {
             setTimeout(() => {

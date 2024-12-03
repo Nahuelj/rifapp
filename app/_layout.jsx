@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 
 export default function Layout() {
   return (
