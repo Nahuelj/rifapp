@@ -12,39 +12,25 @@ export function HeaderHome() {
 
   return (
     <View
-      style={{
-        flexDirection: "row",
-        gap: 9,
-        padding: 10,
-        height: 63,
-        alignSelf: "center",
-        backgroundColor: "#AD62CD",
-        marginTop: 5,
-        marginBottom: 11,
-        borderRadius: 10,
-        width: 345,
-      }}
+      style={{ height: 50, width: "100%", marginTop: 20, marginBottom: 10 }}
     >
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text
-          style={[
-            {
-              fontFamily: "Poppins-SemiBold",
-              paddingHorizontal: 10,
-              backgroundColor: "#FFC600",
-              textAlign: "center",
-              fontSize: 18,
-              flex: 1,
-              textAlignVertical: "center",
-              borderRadius: 5,
-              lineHeight: 46,
-              color: "#49108B",
-            },
-          ]}
-        >
-          🎁 MIS SORTEOS 💖
-        </Text>
-      </View>
+      <Text
+        style={[
+          {
+            fontFamily: "Poppins-SemiBold",
+            paddingHorizontal: 10,
+            textAlign: "center",
+            fontSize: 24,
+            flex: 1,
+            textAlignVertical: "center",
+            borderRadius: 5,
+            lineHeight: 46,
+            color: "white",
+          },
+        ]}
+      >
+        🎲 MIS SORTEOS 🏆
+      </Text>
     </View>
   );
 }

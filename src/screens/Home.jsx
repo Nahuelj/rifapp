@@ -127,7 +127,7 @@ export function Home() {
             justifyContent: "center",
             alignItems: "center",
             position: "absolute",
-            bottom: 0,
+            bottom: 5,
             width: "100%",
             padding: 15,
           }}

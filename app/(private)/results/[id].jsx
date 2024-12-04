@@ -6,14 +6,18 @@ import {
   ImageBackground,
   Dimensions,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getRaffleWinners } from "../../../src/utils/raffle_local_functions";
 import background from "../../../assets/app/background.png";
 import { BackHeaderRaffle } from "../../../src/ui/BackHeader";
-import { LargeText, NormalText } from "../../../src/ui/Texts";
+import { LargeText, NormalText, PodioText } from "../../../src/ui/Texts";
 import ConfettiCannon from "react-native-confetti-cannon";
+import first from "../../../assets/app/icons/1.png";
+import second from "../../../assets/app/icons/2.png";
+import third from "../../../assets/app/icons/3.png";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,8 +25,6 @@ export default function Results() {
   const { id, name, countWinner, confeti } = useLocalSearchParams();
   const [winners, setWinners] = useState([]);
   const [isLoadingWinners, setIsLoadingWinners] = useState(true);
-  console.log("🚀 ~ Results ~ confeti:", confeti);
-  console.log("🚀 ~ Results ~ isLoadingWinners:", isLoadingWinners);
 
   useEffect(() => {
     async function fetchData() {
@@ -67,6 +69,8 @@ export default function Results() {
         }}
       >
         <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
           style={{
             height: 50,
             width: 50,
@@ -78,15 +82,50 @@ export default function Results() {
             borderRadius: 5,
             fontSize: 25,
             marginLeft: 10,
+            overflow: "hidden",
+            color: "white",
           }}
         >
           {`${item.number}`}
         </Text>
-        <NormalText
-          formatText={"capitalize"}
-          color={"black"}
-          content={item.owner}
-        />
+        <View>
+          <PodioText
+            formatText={"capitalize"}
+            color={"black"}
+            content={item.owner}
+          />
+        </View>
+        <View
+          style={{
+            width: 50,
+            height: 50,
+            backgroundColor: "white",
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            right: 10,
+          }}
+        >
+          {item.position == "1" && (
+            <Image
+              style={{ width: 70, height: 70, resizeMode: "cover" }}
+              source={first}
+            />
+          )}
+          {item.position == "2" && (
+            <Image
+              style={{ width: 70, height: 70, resizeMode: "cover" }}
+              source={second}
+            />
+          )}
+          {item.position == "3" && (
+            <Image
+              style={{ width: 70, height: 70, resizeMode: "cover" }}
+              source={third}
+            />
+          )}
+        </View>
       </View>
     </>
   );
@@ -94,7 +133,9 @@ export default function Results() {
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
       <SafeAreaView style={{ flex: 1 }}>
-        <BackHeaderRaffle raffleTitle={name} />
+        <View style={{ marginTop: 10 }}>
+          <BackHeaderRaffle raffleTitle={name} />
+        </View>
 
         <View style={{ marginTop: 25, marginBottom: 20, gap: 10 }}>
           <LargeText content={" 🎉 GANADORES  🎁"} />

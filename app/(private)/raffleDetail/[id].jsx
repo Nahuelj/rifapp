@@ -73,7 +73,9 @@ export default function raffleDetail() {
   return (
     <ImageBackground style={{ flex: 1 }} source={background}>
       <SafeAreaView style={styles.container}>
-        <BackHeaderRaffle raffleTitle={data.title} />
+        <View style={{ marginTop: 10 }}>
+          <BackHeaderRaffle raffleTitle={data.title} />
+        </View>
 
         <View style={{ height: 715 }}>
           <FlatList
@@ -93,7 +95,7 @@ export default function raffleDetail() {
             position: "absolute",
             bottom: 0,
             alignSelf: "center",
-            marginBottom: 10,
+            marginBottom: 20,
           }}
         >
           {data.isActive ? (

@@ -2,6 +2,34 @@ import { Pressable, Text, View } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useFonts } from "expo-font";
 
+export const PodioText = ({ content, color, formatText }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins/Poppins-Regular.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>..</Text>;
+  }
+
+  return (
+    <Text
+      numberOfLines={1}
+      ellipsizeMode="tail"
+      style={{
+        fontFamily: "Poppins-Regular",
+        color: color ? color : "#F3F8FF", // Color del texto
+        fontSize: 20,
+        maxWidth: 200,
+        textAlign: "center",
+        alignSelf: "center",
+        textTransform: formatText ? formatText : "none",
+      }}
+    >
+      {content}
+    </Text>
+  );
+};
+
 export const NormalText = ({ content, color, formatText }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins/Poppins-Regular.ttf"),
