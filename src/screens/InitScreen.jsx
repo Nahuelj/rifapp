@@ -5,41 +5,39 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NormalText, HeaderText } from "../ui/Texts";
 import { LargeYellowButton } from "../ui/Buttons";
 import { RifappLogo } from "../ui/RifappLogo";
-import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { StatusBar } from "react-native";
 
 export const InitScreen = () => {
   const handleStart = () => {
     router.push("/home");
   };
 
+  useEffect(() => {
+    StatusBar.setBackgroundColor("#AD62CD");
+    StatusBar.setBarStyle("light-content");
+  }, []);
+
   return (
-    <View>
-      <ImageBackground source={background}>
-        <SafeAreaView style={styles.cont}>
-          <View style={{ marginTop: 10 }}>
-            <HeaderText content={"🎉 Te damos la Bienvenida 🥳"} />
-          </View>
+    <ImageBackground source={background}>
+      <SafeAreaView style={styles.cont}>
+        <View style={{ marginTop: 10 }}>
+          <HeaderText content={"🎉 Te damos la Bienvenida 🥳"} />
+        </View>
 
-          <RifappLogo />
-          <NormalText
-            content={"Gestiona tus sorteos de forma comoda y segura"}
-          />
-          <NormalText
-            content={
-              "Aqui podras crear tus sorteos personalizados, anotar quienes participan con su numero elegido y realizar un sorteo de forma sencilla y transparente."
-            }
-          />
-          <NormalText content={"¡Crea, anotá y sortea!"} />
-          <LargeYellowButton
-            content={"COMENZAR"}
-            onPressFunction={handleStart}
-          />
+        <RifappLogo />
+        <NormalText content={"Gestiona tus sorteos de forma comoda y segura"} />
+        <NormalText
+          content={
+            "Aqui podras crear tus sorteos personalizados, anotar quienes participan con su numero elegido y realizar un sorteo de forma sencilla y transparente."
+          }
+        />
+        <NormalText content={"¡Crea, anotá y sortea!"} />
+        <LargeYellowButton content={"COMENZAR"} onPressFunction={handleStart} />
 
-          <View style={{ marginBottom: 10 }}></View>
-        </SafeAreaView>
-      </ImageBackground>
-      <StatusBar style="light" backgroundColor="#AD62CD" translucent={false} />
-    </View>
+        <View style={{ marginBottom: 10 }}></View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 

@@ -1,4 +1,10 @@
-import { View, Alert, ImageBackground } from "react-native";
+import {
+  View,
+  Alert,
+  ImageBackground,
+  Keyboard,
+  Pressable,
+} from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { LargeText, NormalText } from "../ui/Texts";
@@ -68,63 +74,67 @@ export function NewRaffle() {
   };
 
   return (
-    <ImageBackground style={{ flex: 1 }} source={background}>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          justifyContent: "space-evenly",
-          paddingHorizontal: 70,
-        }}
-      >
-        <LargeText content={"CREAR SORTEO 🎁"} />
-        <NormalText
-          content={"Complete los siguientes campos para crear un nuevo sorteo"}
-        />
-
-        <View
+    <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+      <ImageBackground style={{ flex: 1 }} source={background}>
+        <SafeAreaView
           style={{
-            gap: 40,
-            width: 300,
-            alignSelf: "center",
-            height: 400,
-            marginBottom: 5,
+            flex: 1,
+            justifyContent: "space-evenly",
+            paddingHorizontal: 70,
           }}
         >
-          <BasicInput
-            setState={setRaffleName}
-            state={raffleName}
-            placeholder={"Nombre del sorteo"}
-          />
-          <NumericInput
-            setState={setMaxCapacity}
-            state={maxCapacity}
-            placeholder={"Cantidad de personas"}
-          />
-          <NumericInput
-            setState={setQuantityWinners}
-            state={quantityWinners}
-            placeholder={"Cantidad de ganadores"}
-          />
-
+          <LargeText content={"CREAR SORTEO 🎁"} />
           <NormalText
             content={
-              "Ingresa el nombre del sorteo, el número de participantes y la cantidad de ganadores que se generaran al realizar el sorteo"
+              "Complete los siguientes campos para crear un nuevo sorteo"
             }
           />
-        </View>
 
-        <View
-          style={{ flexDirection: "row", gap: 15, justifyContent: "center" }}
-        >
-          <SmallRedButton onPressFunction={handleBack} content={"Volver"} />
+          <View
+            style={{
+              gap: 40,
+              width: 300,
+              alignSelf: "center",
+              height: 400,
+              marginBottom: 5,
+            }}
+          >
+            <BasicInput
+              setState={setRaffleName}
+              state={raffleName}
+              placeholder={"Nombre del sorteo"}
+            />
+            <NumericInput
+              setState={setMaxCapacity}
+              state={maxCapacity}
+              placeholder={"Cantidad de personas"}
+            />
+            <NumericInput
+              setState={setQuantityWinners}
+              state={quantityWinners}
+              placeholder={"Cantidad de ganadores"}
+            />
 
-          <SmallYellowButtonWithDesabled
-            onPressFunction={handleCreateRaffle}
-            content={"+ Crear"}
-            disabled={validateComplete()}
-          />
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+            <NormalText
+              content={
+                "Ingresa el nombre del sorteo, el número de participantes y la cantidad de ganadores que se generaran al realizar el sorteo"
+              }
+            />
+          </View>
+
+          <View
+            style={{ flexDirection: "row", gap: 15, justifyContent: "center" }}
+          >
+            <SmallRedButton onPressFunction={handleBack} content={"Volver"} />
+
+            <SmallYellowButtonWithDesabled
+              onPressFunction={handleCreateRaffle}
+              content={"+ Crear"}
+              disabled={validateComplete()}
+            />
+          </View>
+        </SafeAreaView>
+      </ImageBackground>
+    </Pressable>
   );
 }

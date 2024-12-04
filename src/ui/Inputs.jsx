@@ -1,37 +1,40 @@
 import { View, TextInput, Image, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import eye from "../../assets/app/icons/eye.png";
 import hide from "../../assets/app/icons/hide.png";
 
-export function BasicInput({ placeholder, setState, state }) {
-  return (
-    <View
-      style={{
-        width: 300,
-        height: 42,
-        backgroundColor: "white",
-        borderRadius: 5,
-        alignSelf: "center",
-      }}
-    >
-      <TextInput
-        autoCapitalize="none"
-        onChangeText={(text) => {
-          setState(text);
-        }}
-        value={state}
-        placeholder={placeholder}
+export const BasicInput = forwardRef(
+  ({ placeholder, setState, state }, ref) => {
+    return (
+      <View
         style={{
-          flex: 1, // Ocupa todo el espacio disponible
-          color: "purple",
-          fontSize: 20,
-          textAlignVertical: "center", // Centra verticalmente el texto
-          paddingHorizontal: 10, // Espaciado horizontal
+          width: 300,
+          height: 42,
+          backgroundColor: "white",
+          borderRadius: 5,
+          alignSelf: "center",
         }}
-      />
-    </View>
-  );
-}
+      >
+        <TextInput
+          ref={ref} // Pasa la ref aquí
+          autoCapitalize="words"
+          onChangeText={(text) => {
+            setState(text);
+          }}
+          value={state}
+          placeholder={placeholder}
+          style={{
+            flex: 1,
+            color: "purple",
+            fontSize: 20,
+            textAlignVertical: "center",
+            paddingHorizontal: 10,
+          }}
+        />
+      </View>
+    );
+  }
+);
 
 export function TextAreaInput({ placeholder, setState, state }) {
   return (
@@ -43,6 +46,7 @@ export function TextAreaInput({ placeholder, setState, state }) {
       }}
     >
       <TextInput
+        autoCapitalize="sentences"
         multiline={true}
         numberOfLines={4}
         onChangeText={(text) => {

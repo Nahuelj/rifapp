@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -30,11 +30,17 @@ export function AsignedOwnerModal({
 }) {
   const [propietary, setPropietary] = useState(ticketPropietary || "");
   const [note, setNote] = useState(ticketNote || "");
+  const propriateryInputRef = useRef(null);
 
   useEffect(() => {
     if (visibleState) {
       setPropietary(ticketPropietary || "");
       setNote(ticketNote || "");
+
+      // Opcional: pequeño delay para asegurar que el input esté listo
+      setTimeout(() => {
+        propriateryInputRef.current?.focus();
+      }, 100);
     }
   }, [visibleState, ticketPropietary, ticketNote]);
 
@@ -107,6 +113,7 @@ export function AsignedOwnerModal({
 
               <View style={styles.inputContainer}>
                 <BasicInput
+                  ref={propriateryInputRef} // Ref ahora funciona correctamente
                   setState={setPropietary}
                   state={propietary}
                   placeholder={"Nombre"}
