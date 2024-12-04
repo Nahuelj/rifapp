@@ -135,6 +135,7 @@ export default function Results() {
             }, 350);
           }}
           count={100}
+          fadeOut={true}
           fallSpeed={5500}
           origin={{
             x: width / 2,
