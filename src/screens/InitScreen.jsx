@@ -6,9 +6,11 @@ import { NormalText, HeaderText } from "../ui/Texts";
 import { LargeYellowButton } from "../ui/Buttons";
 import { RifappLogo } from "../ui/RifappLogo";
 import { useEffect } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, Dimensions } from "react-native";
 
 export const InitScreen = () => {
+  const { width, height } = Dimensions.get("window");
+
   const handleStart = () => {
     router.push("/home");
   };
@@ -24,17 +26,19 @@ export const InitScreen = () => {
         <View style={{ marginTop: 10 }}>
           <HeaderText content={"🎉 Te damos la Bienvenida 🥳"} />
         </View>
-
         <RifappLogo />
-        <NormalText content={"Gestiona tus sorteos de forma comoda y segura"} />
+        {height > 700 && (
+          <NormalText
+            content={"📋 Gestiona tus sorteos de forma cómoda 🛋️ y segura 🔒!"}
+          />
+        )}
         <NormalText
           content={
-            "Aqui podras crear tus sorteos personalizados, anotar quienes participan con su numero elegido y realizar un sorteo de forma sencilla y transparente."
+            "Crea sorteos personalizados, anota participantes con sus números 🔢 y realiza sorteos de forma sencilla y transparente. ✨"
           }
         />
-        <NormalText content={"¡Crea, anotá y sortea!"} />
+        <NormalText content={"¡Crea 🌟, anotá 📝 y sortea 🎲!"} />
         <LargeYellowButton content={"COMENZAR"} onPressFunction={handleStart} />
-
         <View style={{ marginBottom: 10 }}></View>
       </SafeAreaView>
     </ImageBackground>

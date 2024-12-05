@@ -4,6 +4,7 @@ import {
   Text,
   ImageBackground,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import background from "../../assets/app/background.png";
 import { HeaderHome } from "../components/HeaderHome";
@@ -13,12 +14,16 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { NewRaffleButton } from "../ui/Buttons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { getRaffles } from "../utils/raffle_local_functions";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export function Home() {
+  const { width, height } = Dimensions.get("window");
+
   const flatListRef = useRef(null); // Referencia al FlatList
   const { scrollToTop } = useLocalSearchParams(); // Leer parámetros de la URL
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const flatlistHeith = height - 190;
 
   useFocusEffect(
     useCallback(() => {
@@ -65,7 +70,7 @@ export function Home() {
             justifyContent: "center",
             gap: 15,
             backgroundColor: "transparent",
-            height: 650,
+            height: flatlistHeith,
           }}
         >
           <ActivityIndicator size="large" color="#FFC600" />
@@ -82,7 +87,6 @@ export function Home() {
             justifyContent: "center",
             gap: 15,
             backgroundColor: "transparent",
-            height: 650,
           }}
         >
           <Text style={{ color: "#FFC600", fontSize: 18, textAlign: "center" }}>
@@ -97,7 +101,7 @@ export function Home() {
 
     // Estado con sorteos
     return (
-      <View style={{ height: 685 }}>
+      <View style={{ height: flatlistHeith }}>
         <FlatList
           ref={flatListRef} // Asignar la referencia
           data={data}
@@ -126,8 +130,6 @@ export function Home() {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            position: "absolute",
-            bottom: 5,
             width: "100%",
             padding: 15,
           }}

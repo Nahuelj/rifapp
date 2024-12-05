@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  Dimensions,
   ImageBackground,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ import background from "../../../assets/app/background.png";
 import { LargeYellowButton } from "../../../src/ui/Buttons";
 
 export default function raffleDetail() {
+  const { width, height } = Dimensions.get("window");
   const { id } = useLocalSearchParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [ticketSelected, setTicketSelected] = useState({});
@@ -77,7 +79,7 @@ export default function raffleDetail() {
           <BackHeaderRaffle raffleTitle={data.title} />
         </View>
 
-        <View style={{ height: 715 }}>
+        <View style={{ height: height - 160 }}>
           <FlatList
             data={data.numbers}
             renderItem={renderItem}
@@ -92,10 +94,8 @@ export default function raffleDetail() {
 
         <View
           style={{
-            position: "absolute",
-            bottom: 0,
             alignSelf: "center",
-            marginBottom: 20,
+            marginTop: 10,
           }}
         >
           {data.isActive ? (

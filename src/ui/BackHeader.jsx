@@ -49,7 +49,7 @@ export function BackHeaderRaffle({ raffleTitle }) {
           gap: 15,
           height: 40,
           marginTop: 5,
-          marginBottom: 5,
+          marginBottom: 10,
           alignSelf: "center",
           justifyContent: "center",
         }}

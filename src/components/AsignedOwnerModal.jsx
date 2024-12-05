@@ -81,13 +81,29 @@ export function AsignedOwnerModal({
   };
 
   const handleRemove = async () => {
-    try {
-      await onRemoveFuntion(raffleId, TicketNumber);
-      onUpdateComplete();
-      setVisibleState(false);
-    } catch (error) {
-      console.error("Error al remover:", error);
-    }
+    Alert.alert(
+      "Confirmar eliminación",
+      "¿Está seguro de que desea remover el propietario de este ticket?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await onRemoveFuntion(raffleId, TicketNumber);
+              onUpdateComplete();
+              setVisibleState(false);
+            } catch (error) {
+              console.error("Error al remover:", error);
+            }
+          },
+        },
+      ]
+    );
   };
 
   const renderModalContent = () => {
@@ -119,11 +135,11 @@ export function AsignedOwnerModal({
                   placeholder={"Nombre"}
                 />
 
-                <TextAreaInput
+                {/* <TextAreaInput
                   placeholder={"Nota"}
                   setState={setNote}
                   state={note}
-                />
+                /> */}
               </View>
               <View style={styles.buttonContainer}>
                 <SmallRedButton
@@ -209,16 +225,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   modalContent: {
-    width: "90%",
+    width: "100%",
     maxWidth: 400,
-    borderRadius: 10,
     overflow: "hidden",
   },
   inactiveModalContent: {
     backgroundColor: "white",
     padding: 20,
-    borderRadius: 10,
-    width: "90%",
+    width: "100%",
     maxWidth: 400,
   },
   backgroundImage: {

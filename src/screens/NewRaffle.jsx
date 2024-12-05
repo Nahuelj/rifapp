@@ -4,6 +4,7 @@ import {
   ImageBackground,
   Keyboard,
   Pressable,
+  Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
@@ -15,6 +16,7 @@ import { SmallRedButton, SmallYellowButtonWithDesabled } from "../ui/Buttons";
 import { addNewRaffle } from "../utils/raffle_local_functions";
 
 export function NewRaffle() {
+  const { width, height } = Dimensions.get("window");
   const router = useRouter();
   const [raffleName, setRaffleName] = useState("");
   const [maxCapacity, setMaxCapacity] = useState("");
@@ -84,11 +86,14 @@ export function NewRaffle() {
           }}
         >
           <LargeText content={"CREAR SORTEO 🎁"} />
-          <NormalText
-            content={
-              "Complete los siguientes campos para crear un nuevo sorteo"
-            }
-          />
+
+          {height > 700 && (
+            <NormalText
+              content={
+                "Complete los siguientes campos para crear un nuevo sorteo"
+              }
+            />
+          )}
 
           <View
             style={{
