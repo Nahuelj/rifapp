@@ -43,19 +43,36 @@ export default function Results() {
 
   const RenderWinnerCard = ({ item }) => (
     <>
-      <View
-        style={{
-          backgroundColor: "#AD62CD",
-          alignSelf: "flex-start",
-          marginLeft: 10,
-          marginBottom: 10,
-          paddingHorizontal: 10,
-          borderRadius: 5,
-          paddingVertical: 1,
-        }}
-      >
-        <NormalText content={`Puesto ${item.position}`} />
+      <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            backgroundColor: "#AD62CD",
+            alignSelf: "flex-start",
+            marginLeft: 10,
+            marginBottom: 10,
+            paddingHorizontal: 10,
+            borderRadius: 5,
+            paddingVertical: 1,
+          }}
+        >
+          <NormalText content={`Puesto ${item.position}`} />
+        </View>
+
+        <View
+          style={{
+            backgroundColor: "#AD62CD",
+            alignSelf: "flex-start",
+            marginLeft: 10,
+            marginBottom: 10,
+            paddingHorizontal: 10,
+            borderRadius: 5,
+            paddingVertical: 1,
+          }}
+        >
+          <NormalText content={`Ticket número: ${item.number}`} />
+        </View>
       </View>
+
       <View
         style={{
           width: 360,
@@ -84,6 +101,8 @@ export default function Results() {
             marginLeft: 10,
             overflow: "hidden",
             color: "white",
+            borderWidth: 3,
+            borderColor: "white",
           }}
         >
           {`${item.number}`}
@@ -140,7 +159,7 @@ export default function Results() {
         <View style={{ marginTop: 25, marginBottom: 20, gap: 10 }}>
           <LargeText content={" 🎉 GANADORES  🎁"} />
           <NormalText
-            content={`Se generaron ${countWinner} ganadores para este sorteo`}
+            content={`Se ${countWinner == 1 ? "generó" : "generaron"} ${countWinner} ${countWinner == 1 ? "ganador" : "ganadores"} para este sorteo`}
           />
         </View>
 
