@@ -90,7 +90,7 @@ export function NewRaffle() {
           {height > 700 && (
             <NormalText
               content={
-                "Complete los siguientes campos para crear un nuevo sorteo"
+                "📝 Complete los siguientes campos para crear un nuevo sorteo 🎲!"
               }
             />
           )}
@@ -120,11 +120,17 @@ export function NewRaffle() {
               placeholder={"Cantidad de ganadores"}
             />
 
-            <NormalText
-              content={
-                "Ingresa el nombre del sorteo, el número de participantes y la cantidad de ganadores que se generaran al realizar el sorteo"
-              }
-            />
+            <View
+              style={{
+                flex: 1,
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <NormalText
+                content={"🎲 Nombre, participantes y ganadores del sorteo 🏆"}
+              />
+            </View>
           </View>
 
           <View
